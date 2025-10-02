@@ -1,0 +1,26 @@
+using passwordGenerator.Core.Abstractions;
+using passwordGenerator.Core.Builder;
+using passwordGenerator.Core.Enums;
+using passwordGenerator.Core.Library.DataStructures.NonLinear.HashMap;
+using passwordGenerator.Core.Shared;
+
+namespace passwordGenerator.Core.Validators;
+
+public record SymbolicalValidator(
+    HashMap<ArgumentTypeEnum, object> Values,
+    PasswordBuilder Product,
+    Validator<PasswordBuilder, ArgumentTypeEnum>? Next)
+: Validator<PasswordBuilder, ArgumentTypeEnum>(Values, Product, Next)
+{
+    public override Result<PasswordBuilder> Validate()
+    {
+        if (!Values.TryGetValue(ArgumentTypeEnum.Symbolic, out _))
+        {
+            return Next?.Validate() ?? new(Product);
+        }
+
+        Product.UseSymbols();
+
+        return Next?.Validate() ?? new(Product);
+    }
+}

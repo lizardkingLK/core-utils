@@ -1,0 +1,10 @@
+# commonly ignored files
+*/**/**/bin
+*/**/**/obj
+*/**/**/nupkg
+
+# tested text files
+*.txt
+
+# .vscode
+.vscode
