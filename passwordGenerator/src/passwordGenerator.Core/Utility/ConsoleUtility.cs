@@ -12,7 +12,7 @@ public static class ConsoleUtility
         ResetColor();
     }
 
-    public static void WriteInfo(string message) => WriteLine(message);
+    public static void WriteInformation(string message) => WriteLine(message);
 
     public static void WriteSuccess(string message)
     {
@@ -20,4 +20,6 @@ public static class ConsoleUtility
         WriteLine(message);
         ResetColor();
     }
+
+    public static string? ReadInput() => ReadLine();
 }

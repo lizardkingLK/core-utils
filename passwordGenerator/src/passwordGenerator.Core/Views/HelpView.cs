@@ -1,4 +1,4 @@
-namespace passwordGenerator.Core.Views.Help;
+namespace passwordGenerator.Core.Views;
 
 public static class HelpView
 {

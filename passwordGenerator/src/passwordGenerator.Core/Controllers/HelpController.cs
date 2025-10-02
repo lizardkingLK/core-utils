@@ -2,7 +2,7 @@ using passwordGenerator.Core.Abstractions;
 using passwordGenerator.Core.Enums;
 using passwordGenerator.Core.Library.DataStructures.NonLinear.HashMap;
 using passwordGenerator.Core.Shared;
-using passwordGenerator.Core.Views.Help;
+using passwordGenerator.Core.Views;
 
 namespace passwordGenerator.Core.Controllers;
 
