@@ -35,28 +35,6 @@ symbolic    = [-[s|-symbolic]]
 count       = [-[c|-count]] (16-128)
 ```
 
-#### Game Modes
-
-```
-0 - Automatic
-1 - Manual
-```
-
-#### Output Types
-
-```
-0 - Default Console uses terminal
-1 - Text File Output may use vscode
-```
-
-#### Difficulty Levels
-
-```
-0 - Easy
-1 - Medium
-2 - Hard
-```
-
 ### Inside Dev Environment
 
 ```
