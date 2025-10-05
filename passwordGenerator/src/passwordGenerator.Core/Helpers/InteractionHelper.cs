@@ -12,7 +12,6 @@ public static class InteractionHelper
         passwordBuilder = new();
 
         DynamicArray<Interaction> interactions = new(
-            new HelpInteraction(passwordBuilder),
             new NumericInteraction(passwordBuilder),
             new LowerCaseInteraction(passwordBuilder),
             new UpperCaseInteraction(passwordBuilder),
