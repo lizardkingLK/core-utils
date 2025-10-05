@@ -3,11 +3,11 @@ using static passwordGenerator.Core.Library.DataStructures.Linear.Array.Shared.E
 
 namespace passwordGenerator.Core.Library.DataStructures.Linear.Array;
 
-public class DynamicArray<T>(int capacity = INITIAL_CAPACITY)
+public class DynamicArray<T>
 {
-    private int _capacity = capacity;
+    private int _capacity;
 
-    private T?[] _values = new T[capacity];
+    private T?[] _values;
 
     public IEnumerable<T?> Values => GetValues();
 
@@ -18,6 +18,17 @@ public class DynamicArray<T>(int capacity = INITIAL_CAPACITY)
     }
 
     public int Size = 0;
+
+    public DynamicArray(int capacity = INITIAL_CAPACITY)
+    {
+        if (capacity < INITIAL_CAPACITY)
+        {
+            throw InvalidListCapacityException;
+        }
+
+        _capacity = capacity;
+        _values = new T[capacity];
+    }
 
     public DynamicArray(params T[] values) : this()
     {
