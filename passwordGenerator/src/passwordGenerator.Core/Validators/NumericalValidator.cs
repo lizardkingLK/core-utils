@@ -14,6 +14,12 @@ public record NumericalValidator(
 {
     public override Result<PasswordBuilder> Validate()
     {
+        if (Values.Size == 0)
+        {
+            Product.UseNumeric();
+            return Next?.Validate() ?? new(Product);
+        }
+
         if (!Values.TryGetValue(ArgumentTypeEnum.Numeric, out _))
         {
             return Next?.Validate() ?? new(Product);

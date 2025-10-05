@@ -14,6 +14,12 @@ public record SymbolicalValidator(
 {
     public override Result<PasswordBuilder> Validate()
     {
+        if (Values.Size == 0)
+        {
+            Product.UseSymbols();
+            return Next?.Validate() ?? new(Product);
+        }
+
         if (!Values.TryGetValue(ArgumentTypeEnum.Symbolic, out _))
         {
             return Next?.Validate() ?? new(Product);

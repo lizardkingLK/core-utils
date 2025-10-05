@@ -2,32 +2,31 @@
 using passwordGenerator.Core.Shared;
 using static passwordGenerator.Core.Helpers.ArgumentHelper;
 using static passwordGenerator.Core.Helpers.ControllerHelper;
-using static passwordGenerator.Core.Helpers.ResultHelper;
 
 namespace passwordGenerator.Core;
 
 public class Generator
 {
-    public static void Generate(string[] args)
+    public static Password Generate(string[] args)
     {
         Result<Arguments> arguments = GetArguments(args);
         if (arguments.Errors != null)
         {
-            HandleError(arguments.Errors);
+            return new(Errors: arguments.Errors);
         }
 
         Result<Commands> commands = GetCommands(arguments.Data!);
         if (commands.Errors != null)
         {
-            HandleError(commands.Errors);
+            return new(Errors: commands.Errors);
         }
 
         Result<Password> result = SetCommands(commands.Data!);
         if (result.Errors != null)
         {
-            HandleError(result.Errors);
+            return new(Errors: result.Errors);
         }
 
-        result.Data!.Execute();
+        return result.Data!;
     }
 }

@@ -16,12 +16,19 @@ public record CountValidator(
 {
     public override Result<PasswordBuilder> Validate()
     {
-        if (!Values.TryGetValue(ArgumentTypeEnum.Count, out object? value))
+        if (Values.Size == 0)
+        {
+            Product.UseCount(MinCount);
+            return Next?.Validate() ?? new(Product);
+        }
+
+        bool hasCountValue = Values.TryGetValue(ArgumentTypeEnum.Count, out object? value);
+        if (!hasCountValue)
         {
             return Next?.Validate() ?? new(Product);
         }
 
-        if (!int.TryParse(value as string, out int _count))
+        if (!int.TryParse((value ?? string.Empty).ToString(), out int _count))
         {
             return new(null, InvalidArgumentException(
                 ArgumentTypeEnum.Count.ToString(),
@@ -33,6 +40,11 @@ public record CountValidator(
             return new(null, InvalidArgumentException(
                 ArgumentTypeEnum.Count.ToString(),
                 value!.ToString()!, MinCount, MaxCount));
+        }
+
+        if (Values.Size == 1 && hasCountValue)
+        {
+            return new(Product.UseAll(_count));
         }
 
         Product.UseCount(_count);

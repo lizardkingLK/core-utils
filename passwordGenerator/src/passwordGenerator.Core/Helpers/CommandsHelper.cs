@@ -12,6 +12,7 @@ public static class ControllerHelper
     public static Result<Commands> GetCommands(Arguments arguments)
     {
         HashMap<ArgumentTypeEnum, object> argumentMap = arguments.ArgumentMap;
+
         if (argumentMap.TryGetValue(Help, out _))
         {
             return new(new HelpController(argumentMap));

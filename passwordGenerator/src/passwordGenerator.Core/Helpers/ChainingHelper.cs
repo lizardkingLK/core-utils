@@ -17,13 +17,13 @@ public static class ChainingHelper
         {
             PasswordBuilder passwordBuilder = new();
 
-            CountValidator countValidator = new(argumentMap, passwordBuilder, null);
-            SymbolicalValidator symbolicValidator = new(argumentMap, passwordBuilder, countValidator);
+            SymbolicalValidator symbolicValidator = new(argumentMap, passwordBuilder, null);
             UpperCaseValidator upperCaseValidator = new(argumentMap, passwordBuilder, symbolicValidator);
             LowerCaseValidator lowerCaseValidator = new(argumentMap, passwordBuilder, upperCaseValidator);
             NumericalValidator numericalValidator = new(argumentMap, passwordBuilder, lowerCaseValidator);
+            CountValidator countValidator = new(argumentMap, passwordBuilder, numericalValidator);
 
-            return new(numericalValidator);
+            return new(countValidator);
         }
         catch (Exception ex)
         {
