@@ -6,10 +6,11 @@ using static passwordGenerator.Core.Utility.ValidationUtility;
 
 namespace passwordGenerator.Core.Interactions;
 
-public record HelpInteraction(PasswordBuilder PasswordBuilder) : Interaction
+public record NumericInteraction(PasswordBuilder PasswordBuilder) : Interaction
 {
-    private readonly HelpView _view = new();
-    private bool isTrue = false;
+    private readonly PasswordBuilder _passwordBuilder = PasswordBuilder;
+    private readonly NumericView _view = new();
+    private bool isTrue = true;
 
     public override void Display() => WriteInformation(_view.Message!);
 
@@ -35,7 +36,7 @@ public record HelpInteraction(PasswordBuilder PasswordBuilder) : Interaction
     {
         if (isTrue)
         {
-            WriteInformation(_view.Data!);
+            _passwordBuilder.UseNumeric();
         }
     }
 }

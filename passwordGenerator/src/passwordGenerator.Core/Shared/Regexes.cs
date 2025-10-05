@@ -9,4 +9,6 @@ public static partial class Regexes
 
     [GeneratedRegex(@"^-(\w){1,}$")]
     public static partial Regex PrefixedArgumentRegex();
+    [GeneratedRegex(@"^[yYnN]$")]
+    public static partial Regex YesNoInputRegex();
 }

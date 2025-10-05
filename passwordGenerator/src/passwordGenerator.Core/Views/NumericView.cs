@@ -2,21 +2,14 @@ using passwordGenerator.Core.Abstractions;
 
 namespace passwordGenerator.Core.Views;
 
-public record HelpView : View
+public record NumericView : View
 {
     public override string Message => """
-
-    Would you like to see Help? (Y/n)
+    
+    Select if numbers should include in the password? (Y/n)
     """;
 
-    public override string Data => """
-
-    PASSWORD GENERATOR
-    --------------------------------
-
-    This is help?
-
-    """;
+    public override string Data => string.Empty;
 
     public override string Error => """
     error. Invalid input was given.

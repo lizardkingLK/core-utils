@@ -23,4 +23,12 @@ public static class Values
         new("c", (Count, 16, true)),
         new("count", (Count, 16, true))
     );
+
+    public static readonly HashMap<string, bool> allBooleanInputsMap
+    = new(
+        new("y", true),
+        new("Y", true),
+        new("n", false),
+        new("N", false)
+    );
 }

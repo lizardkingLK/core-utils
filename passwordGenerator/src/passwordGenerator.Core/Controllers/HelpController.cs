@@ -8,8 +8,10 @@ namespace passwordGenerator.Core.Controllers;
 
 public record HelpController(HashMap<ArgumentTypeEnum, object>? ArgumentMap) : Commands(ArgumentMap)
 {
+    private readonly HelpView _helpView = new();
+
     public override Result<Password> Execute()
     {
-        return new Result<Password>(new Password(null, HelpView.Data, null));
+        return new(new(Information: _helpView.Data));
     }
 }

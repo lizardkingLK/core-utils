@@ -2,7 +2,7 @@ using static passwordGenerator.Core.Helpers.ResultHelper;
 
 namespace passwordGenerator.Core.Shared;
 
-public record Password(string? Data, string? Information, string? Errors)
+public record Password(string? Data = null, string? Information = null, string? Errors = null)
 {
     public void Execute()
     {

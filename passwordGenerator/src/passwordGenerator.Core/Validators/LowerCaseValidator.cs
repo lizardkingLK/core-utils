@@ -14,6 +14,12 @@ public record LowerCaseValidator(
 {
     public override Result<PasswordBuilder> Validate()
     {
+        if (Values.Size == 0)
+        {
+            Product.UseLowerCase();
+            return Next?.Validate() ?? new(Product);
+        }
+
         if (!Values.TryGetValue(ArgumentTypeEnum.LowerCase, out _))
         {
             return Next?.Validate() ?? new(Product);

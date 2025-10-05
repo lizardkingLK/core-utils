@@ -15,7 +15,7 @@ public class HashMap<K, V>(float loadFactor = LOAD_FACTOR) where K : notnull
 
     private int _capacity = INITIAL_CAPACITY;
 
-    private int _size = 0;
+    public int Size = 0;
 
     public IEnumerable<KeyValuePair<K, V?>> KeyValues => GetKeyValues();
 
@@ -65,9 +65,9 @@ public class HashMap<K, V>(float loadFactor = LOAD_FACTOR) where K : notnull
         }
 
         bucket!.AddToTail(new HashNode<K, V>(key, value));
-        _size++;
+        Size++;
 
-        if (_size / _capacity >= _loadFactor)
+        if (Size / _capacity >= _loadFactor)
         {
             ReHash();
         }
@@ -81,9 +81,9 @@ public class HashMap<K, V>(float loadFactor = LOAD_FACTOR) where K : notnull
         }
 
         bucket!.AddToTail(new HashNode<K, V>(key, value));
-        _size++;
+        Size++;
 
-        if (_size / _capacity >= _loadFactor)
+        if (Size / _capacity >= _loadFactor)
         {
             ReHash();
         }
@@ -186,7 +186,7 @@ public class HashMap<K, V>(float loadFactor = LOAD_FACTOR) where K : notnull
 
     private static int GetHashCode(K key, int capacity)
     {
-        int hashCode = key.GetHashCode() % 10;
+        int hashCode = key.GetHashCode();
         int bitMaskForIndex = hashCode >> 31;
         hashCode = (hashCode ^ bitMaskForIndex) - bitMaskForIndex;
 

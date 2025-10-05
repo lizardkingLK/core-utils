@@ -5,6 +5,8 @@ namespace passwordGenerator.Core.Utility;
 
 public static class ConsoleUtility
 {
+    public static void WritePrompt() => Write("> ");
+
     public static void WriteError(string message)
     {
         ForegroundColor = Red;
@@ -12,7 +14,19 @@ public static class ConsoleUtility
         ResetColor();
     }
 
-    public static void WriteInformation(string message) => WriteLine(message);
+    public static void WriteInformation(string message)
+    {
+        ForegroundColor = Cyan;
+        WriteLine(message);
+        ResetColor();
+    }
+
+    public static void WriteData(string message)
+    {
+        ForegroundColor = Yellow;
+        WriteLine(message);
+        ResetColor();
+    }
 
     public static void WriteSuccess(string message)
     {

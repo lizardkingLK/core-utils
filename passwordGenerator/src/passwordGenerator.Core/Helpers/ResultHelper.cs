@@ -12,7 +12,7 @@ public static class ResultHelper
 
     public static void HandleInformation(string message)
     {
-        WriteInfo(message);
+        WriteInformation(message);
         Environment.Exit(0);
     }
 

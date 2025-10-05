@@ -14,6 +14,12 @@ public record UpperCaseValidator(
 {
     public override Result<PasswordBuilder> Validate()
     {
+        if (Values.Size == 0)
+        {
+            Product.UseUpperCase();
+            return Next?.Validate() ?? new(Product);
+        }
+
         if (!Values.TryGetValue(ArgumentTypeEnum.UpperCase, out _))
         {
             return Next?.Validate() ?? new(Product);
