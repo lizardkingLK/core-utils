@@ -1,7 +1,6 @@
-using passwordGenerator.Core.Library.DataStructures.Linear.Array;
+using passwordGenerator.Core.Library.DataStructures.Linear.Arrays.DynamicallyAllocatedArray;
 using passwordGenerator.Core.Library.DataStructures.Linear.Lists.LinkedList;
 using passwordGenerator.Core.Library.DataStructures.NonLinear.HashMap.State;
-using static passwordGenerator.Core.Library.DataStructures.Linear.Array.Shared.Constants;
 using static passwordGenerator.Core.Library.DataStructures.NonLinear.HashMap.Shared.Constants;
 using static passwordGenerator.Core.Library.DataStructures.NonLinear.HashMap.Shared.Exceptions;
 
@@ -11,7 +10,7 @@ public class HashMap<K, V>(float loadFactor = LOAD_FACTOR) where K : notnull
 {
     private readonly float _loadFactor = loadFactor;
 
-    private DynamicArray<DoublyLinkedList<HashNode<K, V>>> _buckets = new();
+    private DynamicallyAllocatedArray<DoublyLinkedList<HashNode<K, V>>> _buckets = new();
 
     private int _capacity = INITIAL_CAPACITY;
 
@@ -135,7 +134,7 @@ public class HashMap<K, V>(float loadFactor = LOAD_FACTOR) where K : notnull
     private void ReHash()
     {
         _capacity *= 2;
-        DynamicArray<DoublyLinkedList<HashNode<K, V>>> newBuckets = new(_capacity);
+        DynamicallyAllocatedArray<DoublyLinkedList<HashNode<K, V>>> newBuckets = new(_capacity);
         int newIndex;
         foreach ((K key, V value) in GetHashNodes())
         {
@@ -181,7 +180,7 @@ public class HashMap<K, V>(float loadFactor = LOAD_FACTOR) where K : notnull
     private static bool ContainsBucket(
         int index,
         out DoublyLinkedList<HashNode<K, V>>? bucket,
-        DynamicArray<DoublyLinkedList<HashNode<K, V>>> buckets)
+        DynamicallyAllocatedArray<DoublyLinkedList<HashNode<K, V>>> buckets)
         => buckets.TryGetValue(index, out bucket) && bucket is not null;
 
     private static int GetHashCode(K key, int capacity)

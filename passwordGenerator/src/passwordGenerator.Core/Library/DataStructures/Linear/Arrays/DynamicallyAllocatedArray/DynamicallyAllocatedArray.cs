@@ -1,13 +1,15 @@
-using static passwordGenerator.Core.Library.DataStructures.Linear.Array.Shared.Constants;
-using static passwordGenerator.Core.Library.DataStructures.Linear.Array.Shared.Exceptions;
+using static passwordGenerator.Core.Library.DataStructures.Linear.Arrays.DynamicallyAllocatedArray.Shared.Constants;
+using static passwordGenerator.Core.Library.DataStructures.Linear.Arrays.DynamicallyAllocatedArray.Shared.Exceptions;
 
-namespace passwordGenerator.Core.Library.DataStructures.Linear.Array;
+namespace passwordGenerator.Core.Library.DataStructures.Linear.Arrays.DynamicallyAllocatedArray;
 
-public class DynamicArray<T>
+public class DynamicallyAllocatedArray<T>
 {
     private int _capacity;
 
     private T?[] _values;
+
+    public int Size;
 
     public IEnumerable<T?> Values => GetValues();
 
@@ -17,27 +19,26 @@ public class DynamicArray<T>
         set => Update(index, value);
     }
 
-    public int Size = 0;
-
-    public DynamicArray(int capacity = INITIAL_CAPACITY)
+    public DynamicallyAllocatedArray(int capacity = INITIAL_CAPACITY)
     {
         if (capacity < INITIAL_CAPACITY)
         {
-            throw InvalidListCapacityException;
+            throw InvalidListSizeException;
         }
 
         _capacity = capacity;
         _values = new T[capacity];
     }
 
-    public DynamicArray(params T[] values) : this()
+    public DynamicallyAllocatedArray(params T[] values) : this()
     {
         AddRange(values);
     }
 
-    public DynamicArray(params DynamicArray<T>[] arrayList) : this()
+    public DynamicallyAllocatedArray(
+        params DynamicallyAllocatedArray<T>[] arrayList) : this()
     {
-        foreach (DynamicArray<T> array in arrayList)
+        foreach (DynamicallyAllocatedArray<T> array in arrayList)
         {
             AddRange(array);
         }
@@ -45,10 +46,7 @@ public class DynamicArray<T>
 
     public T Add(T value)
     {
-        if (Size == _capacity)
-        {
-            GrowArray();
-        }
+        GrowArrayIfSatisfies();
 
         _values[Size++] = value;
 
@@ -63,7 +61,7 @@ public class DynamicArray<T>
         }
     }
 
-    private void AddRange(DynamicArray<T> array)
+    private void AddRange(DynamicallyAllocatedArray<T> array)
     {
         foreach (T? value in array.Values)
         {
@@ -81,10 +79,7 @@ public class DynamicArray<T>
             throw InvalidIndexException;
         }
 
-        if (Size == _capacity)
-        {
-            GrowArray();
-        }
+        GrowArrayIfSatisfies();
 
         _values[index] = value;
         Size++;
@@ -113,12 +108,7 @@ public class DynamicArray<T>
     {
         updated = default;
 
-        if (Size == 0)
-        {
-            return false;
-        }
-
-        if (index < 0 || index > _capacity - 1)
+        if (Size == 0 || index < 0 || index > _capacity - 1)
         {
             return false;
         }
@@ -155,23 +145,28 @@ public class DynamicArray<T>
 
         value = _values[index];
 
-        return true;
+        return value is not null;
     }
 
-    public bool TryGetValue(Predicate<T?> filterFunction, out T? value)
+    public bool TryGetValue(
+        Predicate<T?> filterFunction,
+        out T? value,
+        out int? index)
     {
         value = default;
+        index = default;
 
         if (Size == 0)
         {
             return false;
         }
 
-        foreach (T? item in _values)
+        for (int i = 0; i < _capacity; i++)
         {
-            if (filterFunction.Invoke(item))
+            value = _values[i];
+            if (filterFunction.Invoke(value))
             {
-                value = item;
+                index = i;
                 return true;
             }
         }
@@ -189,10 +184,7 @@ public class DynamicArray<T>
         T? removed = _values[Size - 1];
         _values[--Size] = default;
 
-        if (Size <= _capacity / 3)
-        {
-            ShrinkArray();
-        }
+        ShrinkArrayIfSatisfies();
 
         return removed;
     }
@@ -204,17 +196,17 @@ public class DynamicArray<T>
             throw ListEmptyException;
         }
 
-        if (!TryGetValue(item => item != null && item.Equals(target), out T? removed))
+        if (!TryGetValue(item => item != null && item.Equals(target),
+            out T? removed,
+            out int? removedItemIndex))
         {
             throw ItemDoesNotExistException;
         }
 
+        _values[removedItemIndex!.Value] = default;
         Size--;
 
-        if (Size <= _capacity / 3)
-        {
-            ShrinkArray();
-        }
+        ShrinkArrayIfSatisfies();
 
         return removed;
     }
@@ -228,17 +220,17 @@ public class DynamicArray<T>
             return false;
         }
 
-        if (!TryGetValue(item => item != null && item.Equals(target), out removed))
+        if (!TryGetValue(item => item != null && item.Equals(target),
+            out removed,
+            out int? removedIndex))
         {
             return false;
         }
 
+        _values[removedIndex!.Value] = default;
         Size--;
 
-        if (Size <= _capacity / 3)
-        {
-            ShrinkArray();
-        }
+        ShrinkArrayIfSatisfies();
 
         return true;
     }
@@ -257,6 +249,7 @@ public class DynamicArray<T>
 
         T? value = _values[index];
         _values[index] = default;
+
         for (int i = index; i < Size - 1; i++)
         {
             _values[i] = _values[i + 1];
@@ -265,10 +258,7 @@ public class DynamicArray<T>
 
         Size--;
 
-        if (Size <= _capacity / 3)
-        {
-            ShrinkArray();
-        }
+        ShrinkArrayIfSatisfies();
 
         return value;
     }
@@ -277,12 +267,7 @@ public class DynamicArray<T>
     {
         removed = default;
 
-        if (Size == 0)
-        {
-            return false;
-        }
-
-        if (index < 0 || index > _capacity - 1)
+        if (Size == 0 || index < 0 || index > _capacity - 1)
         {
             return false;
         }
@@ -298,10 +283,7 @@ public class DynamicArray<T>
 
         Size--;
 
-        if (Size <= _capacity / 3)
-        {
-            ShrinkArray();
-        }
+        ShrinkArrayIfSatisfies();
 
         return true;
     }
@@ -314,8 +296,13 @@ public class DynamicArray<T>
         }
     }
 
-    private void GrowArray()
+    private void GrowArrayIfSatisfies()
     {
+        if ((float)Size / _capacity < GROWTH_FACTOR)
+        {
+            return;
+        }
+
         int newCapacity = _capacity * 2;
         T?[] newValues = new T[newCapacity];
         for (int i = 0; i < _capacity; i++)
@@ -327,8 +314,13 @@ public class DynamicArray<T>
         _values = newValues;
     }
 
-    private void ShrinkArray()
+    private void ShrinkArrayIfSatisfies()
     {
+        if ((float)Size / _capacity > SHRINK_FACTOR)
+        {
+            return;
+        }
+
         int newCapacity = Size;
         if (newCapacity == 0)
         {
