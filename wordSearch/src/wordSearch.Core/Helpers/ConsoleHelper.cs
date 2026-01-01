@@ -2,12 +2,12 @@ namespace wordSearch.Core.Helpers;
 
 public static class ConsoleHelper
 {
-    public static void Write(
+    public static void WriteLine(
         object? content,
         ConsoleColor foregroundColor)
     {
         Console.ForegroundColor = foregroundColor;
-        Console.Write(content);
+        Console.WriteLine(content);
         Console.ResetColor();
     }
 }

@@ -1,47 +1,31 @@
-﻿using wordSearch.Core.Helpers;
+﻿using wordSearch.Core.Abstractions;
 using wordSearch.Core.Shared.State;
 using static wordSearch.Core.Helpers.ApplicationHelper;
+using static wordSearch.Core.Helpers.ArgumentHelper;
+using static wordSearch.Core.Helpers.ControllerHelper;
 
 namespace wordSearch.Core;
 
 public static class WordSearch
 {
-    public static void Search(
-        bool isInputRedirected,
-        TextReader input,
-        string[] args)
+    public static void Search(string[] args)
     {
-        Result<Arguments> arguments = ArgumentHelper.GetArguments(args);
+        Result<Arguments> arguments = GetArguments(args);
         if (arguments.HasErrors)
         {
             HandleError(arguments.Errors);
         }
-        
-        
 
-        if (!isInputRedirected)
+        Result<Controller> controller = GetController(arguments.Value);
+        if (controller.HasErrors)
         {
-            SearchWordsFromInput(input, arguments);
+            HandleError(controller.Errors);
         }
-        else
+
+        Result<string> result = SetController(controller.Value);
+        if (result.HasErrors)
         {
-            SearchWordsFromKeyboard(arguments);
+            HandleError(result.Errors);
         }
-    }
-
-    public static void SearchWordsFromInput(TextReader input, string[] arguments)
-    {
-        string xd = input.ReadToEnd();
-    }
-
-    public static void SearchWordsFromKeyboard(string[] arguments)
-    {
-        // Trie trie = new();
-
-        // foreach (var item in FileHelper.ReadAllLines())
-        // {
-
-        // }
-        // string[] lines = 
     }
 }

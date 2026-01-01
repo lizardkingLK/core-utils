@@ -4,9 +4,5 @@ namespace wordSearch.Program;
 
 class Program
 {
-    static void Main(string[] arguments)
-    => WordSearch.Search(
-        Console.IsInputRedirected,
-        Console.In,
-        arguments);
+    static void Main(string[] arguments) => WordSearch.Search(arguments);
 }

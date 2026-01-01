@@ -3,6 +3,7 @@ namespace wordSearch.Core.Enums;
 public enum ArgumentTypeEnum : byte
 {
     Help,
-    Path,
-    Prefix,
+    Query,
+    InputPath,
+    OutputPath,
 }

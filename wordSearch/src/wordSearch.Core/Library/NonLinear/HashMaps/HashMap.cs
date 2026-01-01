@@ -1,12 +1,10 @@
 using System.Collections;
-using System.Diagnostics;
 using wordSearch.Core.Library.Linear.Arrays;
 using wordSearch.Core.Library.Linear.Lists;
 using static wordSearch.Core.Library.NonLinear.HashMaps.Shared.Constants;
 
 namespace wordSearch.Core.Library.NonLinear.HashMaps;
 
-[DebuggerDisplay("{Count} {_buckets}")]
 public class HashMap<K, V> : IEnumerable<KeyValuePair<K, V?>> where K : notnull
 {
     private record HashNode(K Key, V? Value)
@@ -39,6 +37,14 @@ public class HashMap<K, V> : IEnumerable<KeyValuePair<K, V?>> where K : notnull
 
         _buckets = [];
         _loadFactor = loadFactor;
+    }
+
+    public HashMap(params (K, V)[] values) : this(LoadFactor)
+    {
+        foreach ((K key, V? value) in values)
+        {
+            Add(key, value);
+        }
     }
 
     public V? Get(K key)
@@ -213,7 +219,7 @@ public class HashMap<K, V> : IEnumerable<KeyValuePair<K, V?>> where K : notnull
         }
     }
 
-    private IEnumerable<KeyValuePair<K, V?>> GetValues()
+    public IEnumerable<KeyValuePair<K, V?>> GetValues()
     {
         foreach (DoublyLinkedList<HashNode> bucket in _buckets)
         {
