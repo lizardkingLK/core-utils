@@ -1,12 +1,17 @@
-using System.Text;
 using wordSearch.Core.Abstractions;
 using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
+using wordSearch.Core.Library.NonLinear.Tries;
 using wordSearch.Core.Shared.State;
+using static wordSearch.Core.Helpers.ApplicationHelper;
+using static wordSearch.Core.Helpers.OutputHelper;
+using static wordSearch.Core.Helpers.PathHelper;
+using static wordSearch.Core.Helpers.TrieHelper;
 
 namespace wordSearch.Core.Controllers;
 
-public record SuggestionController(HashMap<ArgumentTypeEnum, object> Arguments) : Controller(Arguments)
+public record SuggestionController(
+    HashMap<ArgumentTypeEnum, object> Arguments) : Controller(Arguments)
 {
     public override Result<string> Execute()
     {
@@ -16,40 +21,69 @@ public record SuggestionController(HashMap<ArgumentTypeEnum, object> Arguments) 
         }
         else
         {
-            return SearchWordsFromKeyboard();
+            return SearchWordsFromPath();
         }
     }
 
-    public Result<string> SearchWordsFromInput(TextReader input)
+    public Result<string> SearchWordsFromInput(TextReader inputReader)
     {
-        using TextReader stream = input;
-        
-        while (stream.Peek() != -1)
+        Trie trie = GetTrieFromInput(inputReader);
+        if (IsValidQuery(out string query))
         {
-            stream.ReadLine();
+            OutputSuggestions(QuerySuggestions(trie, query));
         }
-
-        Console.WriteLine(xd);
+        else
+        {
+            QuerySuggestions(trie);
+        }
 
         return new(string.Empty);
     }
 
-    public Result<string> SearchWordsFromKeyboard()
+    public Result<string> SearchWordsFromPath()
     {
-        if (!Arguments.TryGetValue(ArgumentTypeEnum.InputPath, out object? inputPath))
+        if (!IsValidInputFilePath(Arguments[ArgumentTypeEnum.InputPath], out string inputPath))
         {
-            return new(null, "error. cannot read file. invalid input path given");
+            HandleError("error. cannot read file. invalid input path given");
         }
 
-        Console.WriteLine(inputPath);
-        // Trie trie = new();
-
-        // foreach (var item in FileHelper.ReadAllLines())
-        // {
-
-        // }
-        // string[] lines = 
+        Trie trie = GetTrieFromInputPath(inputPath);
+        if (IsValidQuery(out string query))
+        {
+            OutputSuggestions(QuerySuggestions(trie, query));
+        }
+        else
+        {
+            QuerySuggestions(trie);
+        }
 
         return new(string.Empty);
+    }
+
+    private void OutputSuggestions(IEnumerable<string> suggestions)
+    {
+        if (Arguments.TryGetValue(ArgumentTypeEnum.OutputPath, out object? outputPathObject))
+        {
+            OutputToFile(suggestions, outputPathObject);
+        }
+        else
+        {
+            OutputToConsole(suggestions, Console.IsOutputRedirected);
+        }
+    }
+
+    private bool IsValidQuery(out string query)
+    {
+        query = string.Empty;
+        if (Arguments.TryGetValue(
+            ArgumentTypeEnum.Query,
+            out object? queryObject)
+            && queryObject is string queryString)
+        {
+            query = queryString;
+            return true;
+        }
+
+        return false;
     }
 }

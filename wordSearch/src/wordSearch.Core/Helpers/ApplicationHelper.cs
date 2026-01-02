@@ -1,10 +1,24 @@
+using wordSearch.Core.Shared.State;
+
 namespace wordSearch.Core.Helpers;
 
 public static class ApplicationHelper
 {
+    private static readonly Message _errorMessage = new()
+    {
+        ForegroundColor = ConsoleColor.Red,
+        Y = 1,
+    };
+
     public static void HandleError(object? content)
     {
-        ConsoleHelper.WriteLine(content, ConsoleColor.Red);
+        _errorMessage.Content = content;
+        ConsoleHelper.WriteLine(_errorMessage);
         Environment.Exit(1);
+    }
+
+    public static void HandleSuccess()
+    {
+        Environment.Exit(0);
     }
 }

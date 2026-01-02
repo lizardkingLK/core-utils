@@ -1,13 +1,68 @@
+using wordSearch.Core.Shared.State;
+using static wordSearch.Core.Shared.Constants;
+
 namespace wordSearch.Core.Helpers;
 
 public static class ConsoleHelper
 {
-    public static void WriteLine(
-        object? content,
-        ConsoleColor foregroundColor)
+    public static void ShowCursor()
     {
-        Console.ForegroundColor = foregroundColor;
-        Console.WriteLine(content);
+        Console.CursorVisible = true;
+    }
+
+    public static void HideCurosr()
+    {
+        Console.CursorVisible = false;
+    }
+
+    public static void ClearWindow()
+    {
+        Console.Clear();
+    }
+
+    public static void ClearLines(int start, int end = 0)
+    {
+        if (end == 0)
+        {
+            end = Console.WindowHeight - 1;
+        }
+
+        while (start < end)
+        {
+            Console.SetCursorPosition(0, start);
+            Console.WriteLine(new string(SymbolSpace, Console.WindowWidth));
+            start++;
+        }
+    }
+
+    public static void WriteLine(Message message)
+    {
+        Console.ForegroundColor = message.ForegroundColor;
+        Console.SetCursorPosition(message.X, message.Y);
+        Console.WriteLine(message.Content);
+        Console.SetCursorPosition(0, 0);
         Console.ResetColor();
+    }
+
+    public static void Write(Message message)
+    {
+        Console.ForegroundColor = message.ForegroundColor;
+        Console.SetCursorPosition(message.X, message.Y);
+        Console.Write(message.Content);
+        Console.ResetColor();
+    }
+
+    public static string? ReadLine(Message message)
+    {
+        Write(message);
+
+        return Console.ReadLine();
+    }
+
+    public static void ReadKey(Message message)
+    {
+        Write(message);
+
+        Console.ReadKey(true);
     }
 }
