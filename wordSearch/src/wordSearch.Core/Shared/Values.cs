@@ -14,10 +14,13 @@ public static class Values
         new("q", (Query, string.Empty, true)),
         new("query", (Query, string.Empty, true)),
 
+        new("c", (Count, 1000, true)),
+        new("cout", (Count, 1000, true)),
+
         new("i", (InputPath, string.Empty, true)),
-        new("input-path", (InputPath, string.Empty, true)),
+        new("input", (InputPath, string.Empty, true)),
 
         new("o", (OutputPath, string.Empty, true)),
-        new("output-path", (OutputPath, string.Empty, true))
+        new("output", (OutputPath, string.Empty, true))
     );
 }

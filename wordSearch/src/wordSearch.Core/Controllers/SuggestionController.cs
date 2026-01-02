@@ -62,13 +62,14 @@ public record SuggestionController(
 
     private void OutputSuggestions(IEnumerable<string> suggestions)
     {
+        _ = Arguments.TryGetValue(ArgumentTypeEnum.Count, out object? countObject);
         if (Arguments.TryGetValue(ArgumentTypeEnum.OutputPath, out object? outputPathObject))
         {
-            OutputToFile(suggestions, outputPathObject);
+            OutputToFile(suggestions, countObject, outputPathObject);
         }
         else
         {
-            OutputToConsole(suggestions, Console.IsOutputRedirected);
+            OutputToConsole(suggestions, countObject, Console.IsOutputRedirected);
         }
     }
 

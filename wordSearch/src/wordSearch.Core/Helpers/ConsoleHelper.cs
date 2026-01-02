@@ -5,6 +5,15 @@ namespace wordSearch.Core.Helpers;
 
 public static class ConsoleHelper
 {
+    static ConsoleHelper()
+    {
+        Console.CancelKeyPress += (_, _) =>
+        {
+            ClearWindow();
+            ShowCursor();
+        };
+    }
+
     public static void ShowCursor()
     {
         Console.CursorVisible = true;
@@ -13,6 +22,11 @@ public static class ConsoleHelper
     public static void HideCurosr()
     {
         Console.CursorVisible = false;
+    }
+
+    public static void SetCursor(int y, int x)
+    {
+        Console.SetCursorPosition(x, y);
     }
 
     public static void ClearWindow()
@@ -41,6 +55,13 @@ public static class ConsoleHelper
         Console.SetCursorPosition(message.X, message.Y);
         Console.WriteLine(message.Content);
         Console.SetCursorPosition(0, 0);
+        Console.ResetColor();
+    }
+
+    public static void WriteNextLine(Message message)
+    {
+        Console.ForegroundColor = message.ForegroundColor;
+        Console.WriteLine(message.Content);
         Console.ResetColor();
     }
 
