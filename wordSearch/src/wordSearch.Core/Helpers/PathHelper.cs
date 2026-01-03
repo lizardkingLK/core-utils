@@ -25,8 +25,24 @@ public static class PathHelper
             return false;
         }
 
+        path = path.Trim();
+
+        string fileName = Path.GetFileName(path);
+        if (string.IsNullOrEmpty(fileName)
+        || !Path.HasExtension(path)
+        || string.IsNullOrEmpty(Path.GetFileNameWithoutExtension(path)))
+        {
+            return false;
+        }
+
         string? directory = Path.GetDirectoryName(path);
         if (string.IsNullOrEmpty(directory))
+        {
+            validated = Path.GetFullPath(path);
+            return true;
+        }
+
+        if (!Directory.Exists(directory))
         {
             return false;
         }
