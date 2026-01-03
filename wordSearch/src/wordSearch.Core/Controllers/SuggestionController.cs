@@ -42,7 +42,10 @@ public record SuggestionController(
 
     public Result<string> SearchWordsFromPath()
     {
-        if (!IsValidInputFilePath(Arguments[ArgumentTypeEnum.InputPath], out string inputPath))
+        string inputPath = string.Empty;
+        
+        if (!Arguments.TryGetValue(ArgumentTypeEnum.InputPath, out object? inputPathObject)
+        || !IsValidInputFilePath(inputPathObject, out inputPath))
         {
             HandleError("error. cannot read file. invalid input path given");
         }
