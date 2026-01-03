@@ -14,5 +14,4 @@ public static class Errors
     => $@"error. invalid {type} argument was given as ""{value}""";
     public static string InvalidArgumentException(string type, string value, int min, int max)
     => $@"error. given {type} argument ""{value}"" was not within ({min},{max}) of length";
-
 }

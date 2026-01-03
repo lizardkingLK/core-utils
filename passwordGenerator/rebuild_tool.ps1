@@ -2,7 +2,7 @@
 $currentDirectory = $PWD
 
 # set tool name
-$toolName = 'passwordgenerator.program'
+$toolName = 'passwordGenerator.Program'
 
 # if tool contains in the system
 $toolList = (& dotnet tool list --global $toolName)
@@ -14,13 +14,13 @@ if ($containsTool) {
 }
 
 # go to cli root
-Set-Location ".\src\$toolName"
+Set-Location "./src/$toolName"
 
 # package the solution
 & dotnet pack
 
 # install the tool
-& dotnet tool install --global --add-source .\nupkg $toolName
+& dotnet tool install --global --add-source ./nupkg $toolName
 
 # set current directory as location
 Set-Location $currentDirectory
