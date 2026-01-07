@@ -117,8 +117,9 @@ public static class OutputHelper
 
         if (countObject is not string countString
         || !int.TryParse(countString, out int count)
-        || count <= 0)
+        || count <= 0 || count >= int.MaxValue)
         {
+            HandleError("error. invalid count argument was given");
             return null;
         }
 

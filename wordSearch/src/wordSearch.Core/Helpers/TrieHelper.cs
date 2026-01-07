@@ -181,7 +181,7 @@ public static class TrieHelper
         ConsoleKeyInfo consoleKeyInfo;
 
     readKey:
-        consoleKeyInfo = Console.ReadKey(true);
+        consoleKeyInfo = ReadKey();
         if (consoleKeyInfo.Key == ConsoleKey.RightArrow)
         {
             pageIndex++;

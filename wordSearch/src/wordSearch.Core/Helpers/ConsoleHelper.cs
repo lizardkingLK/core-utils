@@ -80,6 +80,11 @@ public static class ConsoleHelper
         return Console.ReadLine();
     }
 
+    public static ConsoleKeyInfo ReadKey()
+    {
+        return Console.ReadKey(true);
+    }
+
     public static void ReadKey(Message message)
     {
         Write(message);

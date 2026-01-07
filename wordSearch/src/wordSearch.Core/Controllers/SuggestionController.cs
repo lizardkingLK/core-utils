@@ -28,14 +28,10 @@ public record SuggestionController(
     public Result<string> SearchWordsFromInput(TextReader inputReader)
     {
         Trie trie = GetTrieFromInput(inputReader);
-        if (IsValidQuery(out string query))
-        {
-            OutputSuggestions(QuerySuggestions(trie, query));
-        }
-        else
-        {
-            QuerySuggestions(trie);
-        }
+
+        string query = IsValidQuery(out query) ? query : string.Empty;
+        
+        OutputSuggestions(QuerySuggestions(trie, query));
 
         return new(string.Empty);
     }
@@ -43,7 +39,7 @@ public record SuggestionController(
     public Result<string> SearchWordsFromPath()
     {
         string inputPath = string.Empty;
-        
+
         if (!Arguments.TryGetValue(ArgumentTypeEnum.InputPath, out object? inputPathObject)
         || !IsValidInputFilePath(inputPathObject, out inputPath))
         {
