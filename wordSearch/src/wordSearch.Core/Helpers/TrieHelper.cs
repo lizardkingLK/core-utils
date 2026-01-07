@@ -49,15 +49,14 @@ public static class TrieHelper
     {
         Trie trie = new();
 
-        using TextReader stream = inputReader;
-
         string? line;
-        while (stream.Peek() != -1)
+        int count = 0;
+        while (inputReader.Peek() != -1)
         {
-            line = stream.ReadLine();
+            line = inputReader.ReadLine();
             if (!string.IsNullOrEmpty(line))
             {
-                trie.Insert(line);
+                trie.Insert(line, count++);
             }
         }
 
@@ -68,11 +67,12 @@ public static class TrieHelper
     {
         Trie trie = new();
 
+        int count = 0;
         foreach (string line in FileHelper.ReadAllLines(inputPath))
         {
             if (!string.IsNullOrEmpty(line))
             {
-                trie.Insert(line);
+                trie.Insert(line, count++);
             }
         }
 

@@ -1,3 +1,5 @@
+using wordSearch.Core.Library.Linear.Arrays;
+
 namespace wordSearch.Core.Library.NonLinear.Tries;
 
 public class Trie
@@ -6,21 +8,27 @@ public class Trie
     {
         public Dictionary<char, TrieNode> CharMap { get; } = [];
         public bool IsEndOfWord { get; set; }
+        public int OriginalIndex { get; set; }
     }
 
     private readonly TrieNode _root;
 
+    private readonly DynamicallyAllocatedArray<string> _lines;
+
     public Trie()
     {
         _root = new();
+        _lines = [];
     }
 
-    public void Insert(string word)
+    public void Insert(string word, int index)
     {
         if (string.IsNullOrEmpty(word))
         {
             throw new ArgumentNullException(nameof(word));
         }
+
+        _lines.Add(word);
 
         word = word.Trim().ToLowerInvariant();
 
@@ -37,6 +45,7 @@ public class Trie
         }
 
         current.IsEndOfWord = true;
+        current.OriginalIndex = index;
     }
 
     public bool Search(string word)
@@ -134,24 +143,24 @@ public class Trie
             yield break;
         }
 
-        foreach (string match in FindMatches(current!))
+        foreach (int match in FindMatches(current!))
         {
-            yield return prefix + match;
+            yield return _lines[match]!;
         }
     }
 
-    private static IEnumerable<string> FindMatches(TrieNode current)
+    private static IEnumerable<int> FindMatches(TrieNode current)
     {
         if (current.IsEndOfWord)
         {
-            yield return string.Empty;
+            yield return current.OriginalIndex;
         }
 
         foreach ((char letter, TrieNode? child) in current.CharMap)
         {
-            foreach (string match in FindMatches(child))
+            foreach (int index in FindMatches(child))
             {
-                yield return letter + match;
+                yield return index;
             }
         }
     }

@@ -110,6 +110,21 @@ public class DynamicallyAllocatedArray<T> : IEnumerable<T>
         ShrinkIfSatisfies();
     }
 
+    public bool TryDelete(int index)
+    {
+        if (IsListEmpty() || IsInvalidIndex(index))
+        {
+            return false;
+        }
+
+        _values[index] = default;
+        Count--;
+
+        ShrinkIfSatisfies();
+
+        return true;
+    }
+
     private void ShrinkIfSatisfies()
     {
         if ((float)Count / _capacity >= GrowthFactor)
