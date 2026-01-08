@@ -1,7 +1,4 @@
 using wordSearch.Core.Library.NonLinear.Tries;
-using static wordSearch.Core.Helpers.ConsoleHelper;
-using static wordSearch.Core.Shared.Constants;
-using static wordSearch.Core.Shared.Values;
 
 namespace wordSearch.Core.Helpers;
 

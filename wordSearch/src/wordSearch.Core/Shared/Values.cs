@@ -2,6 +2,7 @@ using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
 using wordSearch.Core.Shared.State;
 using static wordSearch.Core.Enums.ArgumentTypeEnum;
+using static wordSearch.Core.Shared.Constants;
 
 namespace wordSearch.Core.Shared;
 
@@ -27,7 +28,7 @@ public static class Values
 
     public static readonly Message queryMessage = new()
     {
-        Content = "Enter keyword: > ",
+        Content = QueryMessage,
         ForegroundColor = ConsoleColor.Green,
     };
 
@@ -46,16 +47,9 @@ public static class Values
 
     public static readonly Message hintMessage = new()
     {
-        Content = "info. Queries larger than size 30 are not ideal. Use `grep` instead. Press any key to continue...",
+        Content = "info. Queries larger than size 30 are not ideal. Use `grep` instead",
         ForegroundColor = ConsoleColor.DarkYellow,
         Y = 1,
-    };
-
-    public static readonly Message warningMessage = new()
-    {
-        Content = "info. 0 Results found. Press any key to continue...",
-        ForegroundColor = ConsoleColor.Yellow,
-        Y = 2,
     };
 
     public static readonly Message responseMessage = new()

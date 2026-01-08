@@ -7,46 +7,35 @@ namespace wordSearch.Core.Helpers;
 
 public static class PaginationHelper
 {
-    public static void Paginate(List<string> suggestions, int pageIndex)
+    public static void Paginate(List<string> suggestions, ConsoleKey key, ref int pageIndex)
     {
         if (suggestions.Count == 0)
         {
-            ReadKey(warningMessage);
+            ClearLines(responseMessage.Y);
             return;
         }
 
-        HideCurosor();
+        HideCursor();
 
         int totalPages = 1 + suggestions.Count / SizePerPage;
-        List<string> paginated;
-        bool shouldExit = false;
-        while (!shouldExit)
-        {
-            paginated = Page(suggestions, pageIndex, SizePerPage);
-            OutputToConsole(paginated, pageIndex);
-            shouldExit = GetNextPage(totalPages, ref pageIndex);
-        }
+        GetNextPage(totalPages, ref pageIndex, key);
+
+        List<string> paginated = Page(suggestions, pageIndex, SizePerPage);
+        OutputToConsole(paginated, pageIndex);
 
         ShowCursor();
     }
 
-    public static bool GetNextPage(int totalPages, ref int pageIndex)
+    public static void GetNextPage(int totalPages, ref int pageIndex, ConsoleKey key)
     {
-        ConsoleKeyInfo consoleKeyInfo = ReadKey();
-        if (consoleKeyInfo.Key == ConsoleKey.RightArrow)
+        if (key == ConsoleKey.RightArrow)
         {
             pageIndex = (pageIndex + 1) % totalPages;
         }
-        else if (consoleKeyInfo.Key == ConsoleKey.LeftArrow)
+        else if (key == ConsoleKey.LeftArrow)
         {
             pageIndex = (totalPages + pageIndex - 1) % totalPages;
         }
-        else
-        {
-            return true;
-        }
-
-        return false;
     }
 
     public static List<string> Page(

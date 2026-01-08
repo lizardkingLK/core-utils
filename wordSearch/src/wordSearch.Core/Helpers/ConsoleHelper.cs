@@ -19,7 +19,7 @@ public static class ConsoleHelper
         Console.CursorVisible = true;
     }
 
-    public static void HideCurosor()
+    public static void HideCursor()
     {
         Console.CursorVisible = false;
     }
@@ -49,6 +49,30 @@ public static class ConsoleHelper
         }
     }
 
+    public static void Clear(int y, int x, int count)
+    {
+        if (x + count > Console.WindowWidth)
+        {
+            return;
+        }
+
+        int i = 0;
+        while (i < count)
+        {
+            Console.SetCursorPosition(x + i, y);
+            Console.WriteLine(new string(SymbolSpace, 1));
+            i++;
+        }
+    }
+
+    public static async Task ClearAsync(
+        TimeSpan clearAfter,
+        Message message)
+    {
+        await Task.Delay(clearAfter);
+        ClearLines(message.Y, message.Y + 1);
+    }
+
     public static void WriteLine(Message message)
     {
         Console.ForegroundColor = message.ForegroundColor;
@@ -65,12 +89,16 @@ public static class ConsoleHelper
         Console.ResetColor();
     }
 
-    public static void Write(Message message)
+    public static void Write(Message message, TimeSpan? clearAfter = null)
     {
         Console.ForegroundColor = message.ForegroundColor;
         Console.SetCursorPosition(message.X, message.Y);
         Console.Write(message.Content);
         Console.ResetColor();
+        if (clearAfter.HasValue)
+        {
+            Task.Run(async () => await ClearAsync(clearAfter.Value, message));
+        }
     }
 
     public static string? ReadLine(Message message)
@@ -85,10 +113,12 @@ public static class ConsoleHelper
         return Console.ReadKey(true);
     }
 
-    public static void ReadKey(Message message)
+    public static ConsoleKeyInfo ReadKey(
+        Message message,
+        bool shouldHideKey = true)
     {
         Write(message);
 
-        Console.ReadKey(true);
+        return Console.ReadKey(shouldHideKey);
     }
 }
