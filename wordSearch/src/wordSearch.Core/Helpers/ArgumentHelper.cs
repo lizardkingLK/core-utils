@@ -1,8 +1,8 @@
 using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
 using wordSearch.Core.Shared.State;
-using static wordSearch.Core.Shared.Regexes;
 using static wordSearch.Core.Shared.Exceptions;
+using static wordSearch.Core.Shared.Regexes;
 using static wordSearch.Core.Shared.Values;
 
 namespace wordSearch.Core.Helpers;

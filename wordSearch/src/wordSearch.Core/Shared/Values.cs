@@ -1,5 +1,6 @@
 using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
+using wordSearch.Core.Shared.State;
 using static wordSearch.Core.Enums.ArgumentTypeEnum;
 
 namespace wordSearch.Core.Shared;
@@ -23,4 +24,49 @@ public static class Values
         new("o", (OutputPath, string.Empty, true)),
         new("output", (OutputPath, string.Empty, true))
     );
+
+    public static readonly Message queryMessage = new()
+    {
+        Content = "Enter keyword: > ",
+        ForegroundColor = ConsoleColor.Green,
+    };
+
+    public static readonly Message pageMessage = new()
+    {
+        ForegroundColor = ConsoleColor.Green,
+        Y = 2,
+    };
+
+    public static readonly Message controlMessage = new()
+    {
+        Content = "[Esc] - New Query    [<] - Back Page   [>] - Next Page",
+        ForegroundColor = ConsoleColor.Cyan,
+        Y = 2,
+    };
+
+    public static readonly Message hintMessage = new()
+    {
+        Content = "info. Queries larger than size 30 are not ideal. Use `grep` instead. Press any key to continue...",
+        ForegroundColor = ConsoleColor.DarkYellow,
+        Y = 1,
+    };
+
+    public static readonly Message warningMessage = new()
+    {
+        Content = "info. 0 Results found. Press any key to continue...",
+        ForegroundColor = ConsoleColor.Yellow,
+        Y = 2,
+    };
+
+    public static readonly Message responseMessage = new()
+    {
+        Y = 4,
+    };
+
+    public readonly static Message infoMessage = new()
+    {
+        Content = "info. only 1000 suggestions were written. use --output flag to get all items",
+        ForegroundColor = ConsoleColor.DarkYellow,
+        Y = Console.WindowHeight - 2,
+    };
 }

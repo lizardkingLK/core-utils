@@ -19,7 +19,7 @@ public static class ConsoleHelper
         Console.CursorVisible = true;
     }
 
-    public static void HideCurosr()
+    public static void HideCurosor()
     {
         Console.CursorVisible = false;
     }

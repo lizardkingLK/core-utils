@@ -4,18 +4,12 @@ using static wordSearch.Core.Helpers.ApplicationHelper;
 using static wordSearch.Core.Helpers.ConsoleHelper;
 using static wordSearch.Core.Helpers.PathHelper;
 using static wordSearch.Core.Shared.Constants;
+using static wordSearch.Core.Shared.Values;
 
 namespace wordSearch.Core.Helpers;
 
 public static class OutputHelper
 {
-    private readonly static Message _infoMessage = new()
-    {
-        Content = "info. only 1000 suggestions were written. use --output flag to get all items",
-        ForegroundColor = ConsoleColor.DarkYellow,
-        Y = Console.WindowHeight - 2,
-    };
-
     public static void OutputToConsole(
         IEnumerable<string> suggestions,
         object? countObject,
@@ -31,6 +25,21 @@ public static class OutputHelper
         }
     }
 
+    public static void OutputToConsole(List<string> paginated, int pageIndex)
+    {
+        responseMessage.Content = string.Join(Environment.NewLine, paginated);
+        ClearLines(responseMessage.Y);
+        WriteLine(responseMessage);
+        WriteLine(controlMessage);
+
+        pageMessage.Content = new string(SymbolSpace, pageMessage.Size);
+        WriteLine(pageMessage);
+
+        pageMessage.Content = string.Format(PageFormat, pageIndex + 1);
+        pageMessage.X = SpacingInfoPage + ((string)controlMessage.Content!).Length;
+        WriteLine(pageMessage);
+    }
+
     private static void OutputToConsole(IEnumerable<string> suggestions, int? maxCount = null)
     {
         StringBuilder outputBuilder = new();
@@ -43,7 +52,7 @@ public static class OutputHelper
             {
                 if (count == MinResultCount)
                 {
-                    WriteNextLine(_infoMessage);
+                    WriteNextLine(infoMessage);
                     SetCursor(Console.WindowHeight - 1, 0);
                 }
 
@@ -60,7 +69,10 @@ public static class OutputHelper
             return;
         }
 
-        outputBuilder = suggestions.Aggregate(outputBuilder, AppendLine);
+        outputBuilder = suggestions.Aggregate(
+            outputBuilder,
+            (outputBuilder, line) => outputBuilder.AppendLine(line));
+
         WriteLine(new Message
         {
             Content = outputBuilder.ToString(),
@@ -93,10 +105,6 @@ public static class OutputHelper
             fileWriter.WriteLine(suggestion);
         }
     }
-
-    private static StringBuilder AppendLine(
-        StringBuilder outputBuilder,
-        string line) => outputBuilder.AppendLine(line);
 
     private static int? GetMin(int? value)
     {

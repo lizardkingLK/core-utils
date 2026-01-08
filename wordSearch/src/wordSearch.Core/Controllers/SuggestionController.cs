@@ -6,6 +6,7 @@ using wordSearch.Core.Shared.State;
 using static wordSearch.Core.Helpers.ApplicationHelper;
 using static wordSearch.Core.Helpers.OutputHelper;
 using static wordSearch.Core.Helpers.PathHelper;
+using static wordSearch.Core.Helpers.QueryHelper;
 using static wordSearch.Core.Helpers.TrieHelper;
 
 namespace wordSearch.Core.Controllers;
@@ -27,10 +28,10 @@ public record SuggestionController(
 
     public Result<string> SearchWordsFromInput(TextReader inputReader)
     {
-        Trie trie = GetTrieFromInput(inputReader);
+        Trie trie = CreateTrieFromInput(inputReader);
 
-        string query = IsValidQuery(out query) ? query : string.Empty;
-        
+        string query = IsValidQuery(Arguments, out query) ? query : string.Empty;
+
         OutputSuggestions(QuerySuggestions(trie, query));
 
         return new(string.Empty);
@@ -46,8 +47,8 @@ public record SuggestionController(
             HandleError("error. cannot read file. invalid input path given");
         }
 
-        Trie trie = GetTrieFromInputPath(inputPath);
-        if (IsValidQuery(out string query))
+        Trie trie = CreateTrieFromInputPath(inputPath);
+        if (IsValidQuery(Arguments, out string query))
         {
             OutputSuggestions(QuerySuggestions(trie, query));
         }
@@ -70,20 +71,5 @@ public record SuggestionController(
         {
             OutputToConsole(suggestions, countObject, Console.IsOutputRedirected);
         }
-    }
-
-    private bool IsValidQuery(out string query)
-    {
-        query = string.Empty;
-        if (Arguments.TryGetValue(
-            ArgumentTypeEnum.Query,
-            out object? queryObject)
-            && queryObject is string queryString)
-        {
-            query = queryString;
-            return true;
-        }
-
-        return false;
     }
 }
