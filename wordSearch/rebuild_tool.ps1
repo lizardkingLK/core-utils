@@ -2,7 +2,7 @@
 $currentDirectory = $PWD
 
 # set tool name
-$toolName = 'passwordGenerator.Program'
+$toolName = 'wordSearch.Program'
 
 # if tool contains in the system
 $toolList = (& dotnet tool list --global $toolName)
@@ -20,7 +20,7 @@ Set-Location "./src/$toolName"
 & dotnet pack
 
 # install the tool
-& dotnet tool install --global --add-source ./nupkg $toolName
+& dotnet tool install --global --add-source .\nupkg $toolName
 
 # set current directory as location
 Set-Location $currentDirectory
