@@ -1,6 +1,7 @@
 using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
 using wordSearch.Core.Shared.State;
+using wordSearch.Core.Validators;
 using static wordSearch.Core.Shared.Exceptions;
 using static wordSearch.Core.Shared.Regexes;
 using static wordSearch.Core.Shared.Values;
@@ -10,6 +11,42 @@ namespace wordSearch.Core.Helpers;
 public static class ArgumentHelper
 {
     public static Result<Arguments> GetArguments(string[] arguments)
+    {
+        Result<HashMap<ArgumentTypeEnum, object>> collectResult = SetArguments(arguments);
+        if (collectResult.HasErrors)
+        {
+            return new(null, collectResult.Errors);
+        }
+
+        Result<Arguments> validateResult = ValidateArguments(collectResult.Value);
+        if (validateResult.HasErrors)
+        {
+            return new(null, validateResult.Errors);
+        }
+
+        return validateResult;
+    }
+
+    private static Result<Arguments> ValidateArguments(HashMap<ArgumentTypeEnum, object> argumentsMap)
+    {
+        OutputPathValidator outputPath = new(argumentsMap);
+        InputPathValidator inputPath = new(argumentsMap, outputPath);
+        CountValidator count = new(argumentsMap, inputPath); // TODO: int type range min max
+        QueryValidator query = new(argumentsMap, count); // TODO: not longer than 30 chars
+        InteractiveValidator interactive = new(argumentsMap, query);
+        VersionValidator version = new(argumentsMap, interactive);
+        HelpValidator help = new(argumentsMap, version);
+
+        Result<Arguments> validatedResult = help.Validate();
+        if (validatedResult.HasErrors)
+        {
+            return validatedResult;
+        }
+
+        return new(new(argumentsMap));
+    }
+
+    private static Result<HashMap<ArgumentTypeEnum, object>> SetArguments(string[] arguments)
     {
         HashMap<ArgumentTypeEnum, object> argumentMap = [];
 
@@ -47,7 +84,7 @@ public static class ArgumentHelper
             }
         }
 
-        return new(new(argumentMap));
+        return new(argumentMap);
     }
 
     private static Result<bool> ResolveArguments(

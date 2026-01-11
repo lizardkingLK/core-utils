@@ -20,6 +20,7 @@ public static class QueryHelper
 
     public static void QuerySuggestions(Trie trie)
     {
+        HideCursor();
         ClearWindow();
 
         string previous = string.Empty;

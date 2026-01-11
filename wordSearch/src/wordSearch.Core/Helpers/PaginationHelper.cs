@@ -15,15 +15,11 @@ public static class PaginationHelper
             return;
         }
 
-        HideCursor();
-
         int totalPages = 1 + suggestions.Count / SizePerPage;
         GetNextPage(totalPages, ref pageIndex, key);
 
         List<string> paginated = Page(suggestions, pageIndex, SizePerPage);
         OutputToConsole(paginated, pageIndex);
-
-        ShowCursor();
     }
 
     public static void GetNextPage(int totalPages, ref int pageIndex, ConsoleKey key)
