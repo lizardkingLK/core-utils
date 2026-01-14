@@ -162,6 +162,8 @@ public class HashMap<K, V> : IEnumerable<KeyValuePair<K, V?>> where K : notnull
         _buckets = newBuckets;
     }
 
+    public bool ContainsKey(K key) => ContainsKey(key, out _, out _);
+
     private bool ContainsKey(
         K key,
         out DoublyLinkedList<HashNode>? bucket,

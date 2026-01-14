@@ -22,5 +22,7 @@ public static class ControllerHelper
     }
 
     public static Result<string> SetController(Controller controller)
-    => controller.Execute();
+    {
+        return controller.Execute();
+    }
 }

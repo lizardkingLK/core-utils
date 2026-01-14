@@ -16,14 +16,16 @@ public record SuggestionController(
 {
     public override Result<string> Execute()
     {
-        if (Console.IsInputRedirected)
-        {
-            return SearchWordsFromInput(Console.In);
-        }
-        else
+        if (Arguments.ContainsKey(ArgumentTypeEnum.InputPath))
         {
             return SearchWordsFromPath();
         }
+        else if (Console.IsInputRedirected)
+        {
+            return SearchWordsFromInput(Console.In);
+        }
+        
+        return new(string.Empty);
     }
 
     public Result<string> SearchWordsFromInput(TextReader inputReader)

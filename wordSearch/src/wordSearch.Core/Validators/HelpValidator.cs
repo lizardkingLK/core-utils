@@ -11,6 +11,11 @@ public record HelpValidator(
 {
     public override Result<Arguments> Validate()
     {
-        throw new NotImplementedException();
+        if (Map.TryGetValue(ArgumentTypeEnum.Help, out _))
+        {
+            return new(new Arguments(Map));
+        }
+
+        return new(new(Map));
     }
 }

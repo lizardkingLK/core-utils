@@ -18,13 +18,13 @@ public static class ArgumentHelper
             return new(null, collectResult.Errors);
         }
 
-        Result<Arguments> validateResult = ValidateArguments(collectResult.Value);
-        if (validateResult.HasErrors)
-        {
-            return new(null, validateResult.Errors);
-        }
+        // Result<Arguments> validateResult = ValidateArguments(collectResult.Value);
+        // if (validateResult.HasErrors)
+        // {
+        //     return new(null, validateResult.Errors);
+        // }
 
-        return validateResult;
+        return new(new(collectResult.Value));
     }
 
     private static Result<Arguments> ValidateArguments(HashMap<ArgumentTypeEnum, object> argumentsMap)
