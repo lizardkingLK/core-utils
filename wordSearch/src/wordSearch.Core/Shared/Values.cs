@@ -13,6 +13,12 @@ public static class Values
         new("h", (Help, true, false)),
         new("help", (Help, true, false)),
 
+        new("v", (ArgumentTypeEnum.Version, true, false)),
+        new("version", (ArgumentTypeEnum.Version, true, false)),
+
+        new("d", (Dictionary, true, false)),
+        new("dictionary", (Dictionary, true, false)),
+
         new("q", (Query, string.Empty, true)),
         new("query", (Query, string.Empty, true)),
 

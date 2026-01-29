@@ -1,5 +1,6 @@
 using wordSearch.Core.Abstractions;
 using wordSearch.Core.Enums;
+using wordSearch.Core.Helpers;
 using wordSearch.Core.Library.NonLinear.HashMaps;
 using wordSearch.Core.Library.NonLinear.Tries;
 using wordSearch.Core.Shared.State;
@@ -8,6 +9,7 @@ using static wordSearch.Core.Helpers.OutputHelper;
 using static wordSearch.Core.Helpers.PathHelper;
 using static wordSearch.Core.Helpers.QueryHelper;
 using static wordSearch.Core.Helpers.TrieHelper;
+using static wordSearch.Core.Shared.Constants;
 
 namespace wordSearch.Core.Controllers;
 
@@ -16,7 +18,11 @@ public record SuggestionController(
 {
     public override Result<string> Execute()
     {
-        if (Arguments.ContainsKey(ArgumentTypeEnum.InputPath))
+        if (Arguments.ContainsKey(ArgumentTypeEnum.Dictionary))
+        {
+            return SearchWordsFromPath(DictionaryPath);
+        }
+        else if (Arguments.ContainsKey(ArgumentTypeEnum.InputPath))
         {
             return SearchWordsFromPath();
         }
@@ -24,7 +30,7 @@ public record SuggestionController(
         {
             return SearchWordsFromInput(Console.In);
         }
-        
+
         return new(string.Empty);
     }
 
@@ -35,6 +41,23 @@ public record SuggestionController(
         string query = IsValidQuery(Arguments, out query) ? query : string.Empty;
 
         OutputSuggestions(QuerySuggestions(trie, query));
+
+        return new(string.Empty);
+    }
+
+    public Result<string> SearchWordsFromPath(string path)
+    {
+        string filePath = GetAssetPath(path);
+
+        Trie trie = CreateTrieFromInputPath(filePath);
+        if (IsValidQuery(Arguments, out string query))
+        {
+            OutputSuggestions(QuerySuggestions(trie, query));
+        }
+        else
+        {
+            QuerySuggestions(trie);
+        }
 
         return new(string.Empty);
     }
