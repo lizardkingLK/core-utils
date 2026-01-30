@@ -16,8 +16,6 @@ public class Trie
 
     private readonly DynamicallyAllocatedArray<string> _lines;
 
-    private const char DuplicateSkipSentinel = '\n';
-
     public Trie()
     {
         _root = new();
@@ -171,9 +169,8 @@ public class Trie
     public IEnumerable<string> Anagrams(string letters)
     {
         int length = letters.Length;
-        char[] inputs = [.. letters.OrderBy(letter => letter)];
         HashMap<char, int> counts = [];
-        foreach (char input in inputs)
+        foreach (char input in letters)
         {
             if (!counts.TryAdd(input, 1))
             {
@@ -181,42 +178,33 @@ public class Trie
             }
         }
 
-        IEnumerable<int> FindAnagrams(
-            char letter, int wordIndex, TrieNode current)
+        IEnumerable<int> FindAnagrams(int wordIndex, TrieNode current)
         {
             if (wordIndex >= length && current.IsEndOfWord)
             {
                 yield return current.OriginalIndex;
+                yield break;
             }
 
-            char skipped = DuplicateSkipSentinel;
-
-            for (int i = 0; i < length; i++)
+            foreach ((char letter, int count) in counts.OrderBy(kv => kv.Key))
             {
-                if (counts[inputs[i]] == 0
-                || !current!.CharMap.TryGetValue(inputs[i], out TrieNode? child))
+                if (counts[letter] == 0
+                || !current!.CharMap.TryGetValue(letter, out TrieNode? child))
                 {
                     continue;
                 }
 
-                if (inputs[i] == skipped)
-                {
-                    continue;
-                }
-
-                skipped = inputs[i];
-
-                counts[inputs[i]]--;
-                foreach (int index in FindAnagrams(inputs[i], wordIndex + 1, child))
+                counts[letter]--;
+                foreach (int index in FindAnagrams(wordIndex + 1, child))
                 {
                     yield return index;
                 }
 
-                counts[inputs[i]]++;
+                counts[letter]++;
             }
         }
 
-        foreach (int match in FindAnagrams('\n', 0, _root))
+        foreach (int match in FindAnagrams(0, _root))
         {
             yield return _lines[match]!;
         }
