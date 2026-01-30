@@ -170,7 +170,7 @@ public class Trie
     {
         int length = letters.Length;
         HashMap<char, int> counts = [];
-        foreach (char input in letters)
+        foreach (char input in letters.ToLowerInvariant())
         {
             if (!counts.TryAdd(input, 1))
             {
