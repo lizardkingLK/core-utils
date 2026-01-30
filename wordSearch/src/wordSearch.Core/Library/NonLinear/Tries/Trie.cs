@@ -16,6 +16,8 @@ public class Trie
 
     private readonly DynamicallyAllocatedArray<string> _lines;
 
+    private const char DuplicateSkipSentinel = '\n';
+
     public Trie()
     {
         _root = new();
@@ -182,10 +184,12 @@ public class Trie
         IEnumerable<int> FindAnagrams(
             char letter, int wordIndex, TrieNode current)
         {
-            if (wordIndex == length && current.IsEndOfWord)
+            if (wordIndex >= length && current.IsEndOfWord)
             {
                 yield return current.OriginalIndex;
             }
+
+            char skipped = DuplicateSkipSentinel;
 
             for (int i = 0; i < length; i++)
             {
@@ -194,6 +198,13 @@ public class Trie
                 {
                     continue;
                 }
+
+                if (inputs[i] == skipped)
+                {
+                    continue;
+                }
+
+                skipped = inputs[i];
 
                 counts[inputs[i]]--;
                 foreach (int index in FindAnagrams(inputs[i], wordIndex + 1, child))
@@ -205,7 +216,7 @@ public class Trie
             }
         }
 
-        foreach (int match in FindAnagrams(inputs[0], 0, _root))
+        foreach (int match in FindAnagrams('\n', 0, _root))
         {
             yield return _lines[match]!;
         }
