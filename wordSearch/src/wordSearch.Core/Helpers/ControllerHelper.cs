@@ -17,6 +17,18 @@ public static class ControllerHelper
         {
             return new(new HelpController(argumentMap));
         }
+        else if (argumentMap.TryGetValue(ArgumentTypeEnum.Version, out _))
+        {
+            return new(new VersionController(argumentMap));
+        }
+        else if (argumentMap.TryGetValue(Dictionary, out _))
+        {
+            return new(new DictionaryController(argumentMap));
+        }
+        else if (argumentMap.TryGetValue(Anagrams, out _))
+        {
+            return new(new AnagramController(argumentMap));
+        }
 
         return new(new SuggestionController(argumentMap));
     }

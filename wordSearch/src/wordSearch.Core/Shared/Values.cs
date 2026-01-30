@@ -16,8 +16,11 @@ public static class Values
         new("v", (ArgumentTypeEnum.Version, true, false)),
         new("version", (ArgumentTypeEnum.Version, true, false)),
 
-        new("d", (Dictionary, true, false)),
-        new("dictionary", (Dictionary, true, false)),
+        new("d", (Dictionary, string.Empty, true)),
+        new("dictionary", (Dictionary, string.Empty, true)),
+
+        new("a", (Anagrams, string.Empty, true)),
+        new("anagrams", (Anagrams, string.Empty, true)),
 
         new("q", (Query, string.Empty, true)),
         new("query", (Query, string.Empty, true)),

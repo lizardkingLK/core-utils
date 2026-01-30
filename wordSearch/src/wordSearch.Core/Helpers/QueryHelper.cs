@@ -96,6 +96,20 @@ public static class QueryHelper
         return trie.Autocomplete(query);
     }
 
+    public static bool IsValidQuery(object? queryObject, out string query)
+    {
+        query = string.Empty;
+
+        if (queryObject is string queryString
+        && queryString != DictionarySentinel)
+        {
+            query = queryString;
+            return true;
+        }
+
+        return false;
+    }
+
     public static bool IsValidQuery(
         HashMap<ArgumentTypeEnum, object> arguments,
         out string query)

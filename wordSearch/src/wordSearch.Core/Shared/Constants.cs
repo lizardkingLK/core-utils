@@ -11,4 +11,5 @@ public static class Constants
     public const string DictionaryPath = "./Assets/Dictionary/index.txt";
     public const string PageFormat = "Page {0}";
     public const string QueryMessage = "Enter keyword: > ";
+    public const string DictionarySentinel = ".";
 }
