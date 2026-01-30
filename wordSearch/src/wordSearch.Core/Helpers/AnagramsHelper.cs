@@ -1,23 +1,23 @@
+using static wordSearch.Core.Helpers.InputHelper;
+using static wordSearch.Core.Shared.Events;
 using wordSearch.Core.Library.NonLinear.Tries;
 using static wordSearch.Core.Helpers.ConsoleHelper;
-using static wordSearch.Core.Helpers.InputHelper;
 using static wordSearch.Core.Helpers.PaginationHelper;
 using static wordSearch.Core.Shared.Constants;
-using static wordSearch.Core.Shared.Events;
 using static wordSearch.Core.Shared.Values;
 
 namespace wordSearch.Core.Helpers;
 
-public static class QueryHelper
+public static class AnagramsHelper
 {
     private static readonly InputHandler _inputHandler;
 
-    static QueryHelper()
+    static AnagramsHelper()
     {
         _inputHandler = new InputHandler(HandleQuery);
     }
 
-    public static void QuerySuggestions(Trie trie)
+    public static void QueryAnagramSuggestions(Trie trie)
     {
         HideCursor();
         ClearWindow();
@@ -52,15 +52,15 @@ public static class QueryHelper
             else
             {
                 pageIndex = 0;
-                Paginate(suggestions = [.. QuerySuggestions(trie, query)], key, ref pageIndex);
+                Paginate(suggestions = [.. QueryAnagramSuggestions(trie, query)], key, ref pageIndex);
             }
 
             previous = query;
         }
     }
 
-    public static IEnumerable<string> QuerySuggestions(Trie trie, string query)
+    public static IEnumerable<string> QueryAnagramSuggestions(Trie trie, string query)
     {
-        return trie.Autocomplete(query);
+        return trie.Anagrams(query);
     }
 }

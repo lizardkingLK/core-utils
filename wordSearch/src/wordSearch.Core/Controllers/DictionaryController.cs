@@ -3,6 +3,7 @@ using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
 using wordSearch.Core.Library.NonLinear.Tries;
 using wordSearch.Core.Shared.State;
+using static wordSearch.Core.Helpers.InputHelper;
 using static wordSearch.Core.Helpers.OutputHelper;
 using static wordSearch.Core.Helpers.PathHelper;
 using static wordSearch.Core.Helpers.QueryHelper;

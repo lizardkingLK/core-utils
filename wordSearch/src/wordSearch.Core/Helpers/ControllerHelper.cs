@@ -27,7 +27,7 @@ public static class ControllerHelper
         }
         else if (argumentMap.TryGetValue(Anagrams, out _))
         {
-            return new(new AnagramController(argumentMap));
+            return new(new AnagramsController(argumentMap));
         }
 
         return new(new SuggestionController(argumentMap));

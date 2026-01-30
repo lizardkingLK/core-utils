@@ -3,44 +3,51 @@ using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
 using wordSearch.Core.Library.NonLinear.Tries;
 using wordSearch.Core.Shared.State;
+using static wordSearch.Core.Helpers.AnagramsHelper;
 using static wordSearch.Core.Helpers.ApplicationHelper;
 using static wordSearch.Core.Helpers.InputHelper;
 using static wordSearch.Core.Helpers.OutputHelper;
 using static wordSearch.Core.Helpers.PathHelper;
-using static wordSearch.Core.Helpers.QueryHelper;
 using static wordSearch.Core.Helpers.TrieHelper;
+using static wordSearch.Core.Shared.Constants;
 
 namespace wordSearch.Core.Controllers;
 
-public record SuggestionController(
+public record AnagramsController(
     HashMap<ArgumentTypeEnum, object> Arguments) : Controller(Arguments)
 {
     public override Result<string> Execute()
     {
         if (Arguments.ContainsKey(ArgumentTypeEnum.InputPath))
         {
-            return SearchWordsFromPath();
+            SearchAnagramsFromPath();
         }
-        else if (Console.IsInputRedirected)
+        else
         {
-            return SearchWordsFromInput(Console.In);
+            SearchAnagramsFromPath(DictionaryPath);
         }
 
         return new(string.Empty);
     }
 
-    public Result<string> SearchWordsFromInput(TextReader inputReader)
+    public Result<string> SearchAnagramsFromPath(string path)
     {
-        Trie trie = CreateTrieFromInput(inputReader);
+        string filePath = GetAssetPath(path);
 
-        string query = IsValidQuery(Arguments, out query) ? query : string.Empty;
-
-        OutputSuggestions(Arguments, QuerySuggestions(trie, query));
+        Trie trie = CreateTrieFromInputPath(filePath);
+        if (IsValidQuery(Arguments[ArgumentTypeEnum.Anagrams], out string? query))
+        {
+            OutputSuggestions(Arguments, QueryAnagramSuggestions(trie, query));
+        }
+        else
+        {
+            QueryAnagramSuggestions(trie);
+        }
 
         return new(string.Empty);
     }
 
-    public Result<string> SearchWordsFromPath()
+    public Result<string> SearchAnagramsFromPath()
     {
         string inputPath = string.Empty;
 
@@ -51,13 +58,13 @@ public record SuggestionController(
         }
 
         Trie trie = CreateTrieFromInputPath(inputPath);
-        if (IsValidQuery(Arguments, out string query))
+        if (IsValidQuery(Arguments[ArgumentTypeEnum.Anagrams], out string? query))
         {
-            OutputSuggestions(Arguments, QuerySuggestions(trie, query));
+            OutputSuggestions(Arguments, QueryAnagramSuggestions(trie, query));
         }
         else
         {
-            QuerySuggestions(trie);
+            QueryAnagramSuggestions(trie);
         }
 
         return new(string.Empty);

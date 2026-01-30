@@ -1,4 +1,5 @@
 using wordSearch.Core.Library.Linear.Arrays;
+using wordSearch.Core.Library.NonLinear.HashMaps;
 
 namespace wordSearch.Core.Library.NonLinear.Tries;
 
@@ -143,25 +144,70 @@ public class Trie
             yield break;
         }
 
+        static IEnumerable<int> FindMatches(TrieNode current)
+        {
+            if (current.IsEndOfWord)
+            {
+                yield return current.OriginalIndex;
+            }
+
+            foreach ((char letter, TrieNode? child) in current.CharMap)
+            {
+                foreach (int index in FindMatches(child))
+                {
+                    yield return index;
+                }
+            }
+        }
+
         foreach (int match in FindMatches(current!))
         {
             yield return _lines[match]!;
         }
     }
 
-    private static IEnumerable<int> FindMatches(TrieNode current)
+    public IEnumerable<string> Anagrams(string letters)
     {
-        if (current.IsEndOfWord)
+        int length = letters.Length;
+        char[] inputs = [.. letters.OrderBy(letter => letter)];
+        HashMap<char, int> counts = [];
+        foreach (char input in inputs)
         {
-            yield return current.OriginalIndex;
+            if (!counts.TryAdd(input, 1))
+            {
+                counts[input]++;
+            }
         }
 
-        foreach ((char letter, TrieNode? child) in current.CharMap)
+        IEnumerable<int> FindAnagrams(
+            char letter, int wordIndex, TrieNode current)
         {
-            foreach (int index in FindMatches(child))
+            if (wordIndex == length && current.IsEndOfWord)
             {
-                yield return index;
+                yield return current.OriginalIndex;
             }
+
+            for (int i = 0; i < length; i++)
+            {
+                if (counts[inputs[i]] == 0
+                || !current!.CharMap.TryGetValue(inputs[i], out TrieNode? child))
+                {
+                    continue;
+                }
+
+                counts[inputs[i]]--;
+                foreach (int index in FindAnagrams(inputs[i], wordIndex + 1, child))
+                {
+                    yield return index;
+                }
+
+                counts[inputs[i]]++;
+            }
+        }
+
+        foreach (int match in FindAnagrams(inputs[0], 0, _root))
+        {
+            yield return _lines[match]!;
         }
     }
 
