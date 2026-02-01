@@ -17,31 +17,6 @@ public record SuggestionController(
 {
     public override Result<string> Execute()
     {
-        if (Arguments.ContainsKey(ArgumentTypeEnum.InputPath))
-        {
-            return SearchWordsFromPath();
-        }
-        else if (Console.IsInputRedirected)
-        {
-            return SearchWordsFromInput(Console.In);
-        }
-
-        return new(string.Empty);
-    }
-
-    public Result<string> SearchWordsFromInput(TextReader inputReader)
-    {
-        Trie trie = CreateTrieFromInput(inputReader);
-
-        string query = IsValidQuery(Arguments, out query) ? query : string.Empty;
-
-        OutputSuggestions(Arguments, QuerySuggestions(trie, query));
-
-        return new(string.Empty);
-    }
-
-    public Result<string> SearchWordsFromPath()
-    {
         string inputPath = string.Empty;
 
         if (!Arguments.TryGetValue(ArgumentTypeEnum.InputPath, out object? inputPathObject)

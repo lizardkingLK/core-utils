@@ -29,8 +29,16 @@ public static class ControllerHelper
         {
             return new(new AnagramsController(argumentMap));
         }
+        else if (argumentMap.TryGetValue(InputPath, out _))
+        {
+            return new(new SuggestionController(argumentMap));
+        }
+        else if (Console.IsInputRedirected)
+        {
+            return new (new RedirectionController(argumentMap));
+        }
 
-        return new(new SuggestionController(argumentMap));
+        return new(null, "error. invalid controller mapping");
     }
 
     public static Result<string> SetController(Controller controller)

@@ -1,5 +1,6 @@
 using wordSearch.Core.Library.Linear.Arrays;
 using wordSearch.Core.Library.NonLinear.HashMaps;
+using static wordSearch.Core.Shared.Regexes;
 
 namespace wordSearch.Core.Library.NonLinear.Tries;
 
@@ -31,7 +32,7 @@ public class Trie
 
         _lines.Add(word);
 
-        word = word.Trim().ToLowerInvariant();
+        word = Normalize(word);
 
         TrieNode? current = _root;
         foreach (char letter in word)
@@ -56,7 +57,7 @@ public class Trie
             throw new ArgumentNullException(nameof(word));
         }
 
-        word = word.Trim().ToLowerInvariant();
+        word = Normalize(word);
 
         TrieNode? current = _root;
         foreach (char letter in word)
@@ -79,7 +80,7 @@ public class Trie
             throw new ArgumentNullException(nameof(prefix));
         }
 
-        prefix = prefix.Trim().ToLowerInvariant();
+        prefix = Normalize(prefix);
 
         TrieNode? current = _root;
         foreach (char letter in prefix)
@@ -102,7 +103,7 @@ public class Trie
             throw new ArgumentNullException(nameof(word));
         }
 
-        word = word.Trim().ToLowerInvariant();
+        word = Normalize(word);
 
         _ = Delete(word, _root, 0);
     }
@@ -137,7 +138,7 @@ public class Trie
 
     public IEnumerable<string> Autocomplete(string prefix)
     {
-        prefix = prefix.Trim().ToLowerInvariant();
+        prefix = Normalize(prefix);
 
         if (!IsValidPrefix(prefix, out TrieNode? current))
         {
@@ -168,9 +169,11 @@ public class Trie
 
     public IEnumerable<string> Anagrams(string letters)
     {
+        letters = Normalize(letters);
+
         int length = letters.Length;
         HashMap<char, int> counts = [];
-        foreach (char input in letters.ToLowerInvariant())
+        foreach (char input in letters)
         {
             if (!counts.TryAdd(input, 1))
             {
@@ -229,4 +232,9 @@ public class Trie
     public IEnumerable<string> Output() => Autocomplete(string.Empty);
 
     public int Count(string word) => Autocomplete(word).Count();
+
+    private static string Normalize(string input)
+    => EscapeWhitespaceRegex()
+    .Replace(input, string.Empty)
+    .ToLowerInvariant();
 }

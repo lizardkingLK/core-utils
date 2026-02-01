@@ -12,4 +12,5 @@ public static class Constants
     public const string PageFormat = "Page {0}";
     public const string QueryMessage = "Enter keyword: > ";
     public const string DictionarySentinel = ".";
+    public const string AppUrl = "https://github.com/lizardkingLK/core-utils/tree/main/wordSearch";
 }
