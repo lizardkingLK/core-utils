@@ -6,7 +6,7 @@ using wordSearch.Core.Shared.State;
 namespace wordSearch.Core.Controllers;
 
 public record HelpController(
-    HashMap<ArgumentTypeEnum, object>? ArgumentMap) : Controller(ArgumentMap)
+    HashMap<ArgumentTypeEnum, object> Arguments) : Controller(Arguments)
 {
     public override Result<string> Execute()
     {

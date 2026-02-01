@@ -29,9 +29,13 @@ public static class ControllerHelper
         {
             return new(new AnagramsController(argumentMap));
         }
+        else if (argumentMap.TryGetValue(Pattern, out _))
+        {
+            return new(new PatternController(argumentMap));
+        }
         else if (argumentMap.TryGetValue(InputPath, out _))
         {
-            return new(new SuggestionController(argumentMap));
+            return new(new QueryController(argumentMap));
         }
         else if (Console.IsInputRedirected)
         {

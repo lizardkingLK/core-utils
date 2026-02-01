@@ -3,6 +3,7 @@ namespace wordSearch.Core.Shared;
 public static class Constants
 {
     public const char SymbolSpace = ' ';
+    public const char SymbolPlace = '_';
     public const int SizePerPage = 10;
     public const int SpacingInfoPage = 10;
     public const int MinResultCount = 1000;

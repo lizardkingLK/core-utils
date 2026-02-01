@@ -12,7 +12,7 @@ using static wordSearch.Core.Helpers.TrieHelper;
 
 namespace wordSearch.Core.Controllers;
 
-public record SuggestionController(
+public record QueryController(
     HashMap<ArgumentTypeEnum, object> Arguments) : Controller(Arguments)
 {
     public override Result<string> Execute()

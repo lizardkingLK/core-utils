@@ -7,7 +7,8 @@ using static wordSearch.Core.Shared.Constants;
 
 namespace wordSearch.Core.Controllers;
 
-public record VersionController(HashMap<ArgumentTypeEnum, object>? ArgumentMap) : Controller(ArgumentMap)
+public record VersionController(
+    HashMap<ArgumentTypeEnum, object> Arguments) : Controller(Arguments)
 {
     public override Result<string> Execute()
     {
