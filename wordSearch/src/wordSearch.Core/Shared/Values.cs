@@ -76,8 +76,8 @@ public static class Values
         Y = Console.WindowHeight - 2,
     };
 
-    public static readonly Message keyboardUnavailableMessage = new()
+    public static readonly Message replUnavailableMessage = new()
     {
-        Content = "error. input not available when redirected",
+        Content = "error. repl mode not available with current request",
     };
 }

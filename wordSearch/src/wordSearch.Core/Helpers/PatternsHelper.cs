@@ -22,7 +22,7 @@ public static class PatternsHelper
     {
         if (IsInputUnavailable())
         {
-            HandleError(keyboardUnavailableMessage.Content);
+            HandleError(replUnavailableMessage.Content);
             return;
         }
 

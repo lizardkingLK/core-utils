@@ -22,7 +22,7 @@ public static class AnagramsHelper
     {
         if (IsInputUnavailable())
         {
-            HandleError(keyboardUnavailableMessage.Content);
+            HandleError(replUnavailableMessage.Content);
             return;
         }
 
