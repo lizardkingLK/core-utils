@@ -43,7 +43,7 @@ public static class InputHelper
     {
         query = string.Empty;
 
-        if (queryObject is string queryString 
+        if (queryObject is string queryString
         && queryString != DictionarySentinel)
         {
             query = queryString;
@@ -70,5 +70,12 @@ public static class InputHelper
         }
 
         return false;
+    }
+
+    public static bool IsInputUnavailable()
+    {
+        return Console.IsErrorRedirected
+        || Console.IsInputRedirected
+        || Console.IsOutputRedirected;
     }
 }

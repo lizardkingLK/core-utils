@@ -75,4 +75,9 @@ public static class Values
         ForegroundColor = ConsoleColor.DarkYellow,
         Y = Console.WindowHeight - 2,
     };
+
+    public static readonly Message keyboardUnavailableMessage = new()
+    {
+        Content = "error. input not available when redirected",
+    };
 }

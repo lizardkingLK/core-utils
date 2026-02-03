@@ -1,9 +1,10 @@
-using static wordSearch.Core.Helpers.InputHelper;
-using static wordSearch.Core.Shared.Events;
 using wordSearch.Core.Library.NonLinear.Tries;
+using static wordSearch.Core.Helpers.ApplicationHelper;
 using static wordSearch.Core.Helpers.ConsoleHelper;
+using static wordSearch.Core.Helpers.InputHelper;
 using static wordSearch.Core.Helpers.PaginationHelper;
 using static wordSearch.Core.Shared.Constants;
+using static wordSearch.Core.Shared.Events;
 using static wordSearch.Core.Shared.Values;
 
 namespace wordSearch.Core.Helpers;
@@ -19,6 +20,12 @@ public static class PatternsHelper
 
     public static void QueryPatternSuggestions(Trie trie)
     {
+        if (IsInputUnavailable())
+        {
+            HandleError(keyboardUnavailableMessage.Content);
+            return;
+        }
+
         HideCursor();
         ClearWindow();
 

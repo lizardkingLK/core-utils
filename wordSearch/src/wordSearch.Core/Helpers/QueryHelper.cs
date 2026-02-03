@@ -1,4 +1,5 @@
 using wordSearch.Core.Library.NonLinear.Tries;
+using static wordSearch.Core.Helpers.ApplicationHelper;
 using static wordSearch.Core.Helpers.ConsoleHelper;
 using static wordSearch.Core.Helpers.InputHelper;
 using static wordSearch.Core.Helpers.PaginationHelper;
@@ -19,6 +20,12 @@ public static class QueryHelper
 
     public static void QuerySuggestions(Trie trie)
     {
+        if (IsInputUnavailable())
+        {
+            HandleError(keyboardUnavailableMessage.Content);
+            return;
+        }
+
         HideCursor();
         ClearWindow();
 
