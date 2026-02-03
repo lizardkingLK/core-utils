@@ -42,7 +42,7 @@ public static class ControllerHelper
             return new (new RedirectionController(argumentMap));
         }
 
-        return new(null, "error. invalid controller mapping");
+        return new(null, "error. invalid argument combination");
     }
 
     public static Result<string> SetController(Controller controller)
