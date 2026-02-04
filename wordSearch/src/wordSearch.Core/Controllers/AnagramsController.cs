@@ -24,17 +24,15 @@ public record AnagramsController(
         }
         else
         {
-            SearchAnagramsFromPath(DictionaryPath);
+            SearchAnagramsFromResource(DictionaryResource);
         }
 
         return new(string.Empty);
     }
 
-    public Result<string> SearchAnagramsFromPath(string path)
+    public Result<string> SearchAnagramsFromResource(string resource)
     {
-        string filePath = GetAssetPath(path);
-
-        Trie trie = CreateTrieFromInputPath(filePath);
+        Trie trie = CreateTrieFromEmbeddedAsset(resource);
         if (IsValidQuery(Arguments[ArgumentTypeEnum.Anagrams], out string? query))
         {
             OutputSuggestions(Arguments, QueryAnagramSuggestions(trie, query));

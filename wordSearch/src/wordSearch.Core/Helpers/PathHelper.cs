@@ -51,13 +51,4 @@ public static class PathHelper
 
         return true;
     }
-
-    internal static string GetAssetPath(string assetPath)
-    {
-        return Path.GetFullPath(
-            Path.Combine(
-                Directory.GetParent(
-                    AppContext.BaseDirectory)!.FullName,
-                    assetPath));
-    }
 }
