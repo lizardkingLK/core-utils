@@ -1,4 +1,3 @@
-using System.Reflection;
 using wordSearch.Core.Abstractions;
 using wordSearch.Core.Enums;
 using wordSearch.Core.Library.NonLinear.HashMaps;
@@ -14,9 +13,7 @@ public record VersionController(
     {
         Console.WriteLine("{0}\n{1}\n{2}",
         nameof(WordSearch),
-        Assembly.GetExecutingAssembly()
-        .GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
-        .InformationalVersion,
+        Environment.ProcessPath,
         AppUrl);
 
         return new Result<string>(string.Empty);
