@@ -4,8 +4,10 @@ public enum ArgumentTypeEnum : byte
 {
     Help,
     Version,
-    Interactive,
-    Query,  // TODO: regex style with underscores and stars only
+    Anagrams,
+    Dictionary,
+    Query,  
+    Pattern,
     Count,
     InputPath,
     OutputPath,

@@ -1,4 +1,6 @@
 using System.Text;
+using wordSearch.Core.Enums;
+using wordSearch.Core.Library.NonLinear.HashMaps;
 using wordSearch.Core.Shared.State;
 using static wordSearch.Core.Helpers.ApplicationHelper;
 using static wordSearch.Core.Helpers.ConsoleHelper;
@@ -103,6 +105,21 @@ public static class OutputHelper
         foreach (string suggestion in suggestions)
         {
             fileWriter.WriteLine(suggestion);
+        }
+    }
+
+    public static void OutputSuggestions(
+        HashMap<ArgumentTypeEnum, object> Arguments,
+        IEnumerable<string> suggestions)
+    {
+        _ = Arguments.TryGetValue(ArgumentTypeEnum.Count, out object? countObject);
+        if (Arguments.TryGetValue(ArgumentTypeEnum.OutputPath, out object? outputPathObject))
+        {
+            OutputToFile(suggestions, countObject, outputPathObject);
+        }
+        else
+        {
+            OutputToConsole(suggestions, countObject, Console.IsOutputRedirected);
         }
     }
 

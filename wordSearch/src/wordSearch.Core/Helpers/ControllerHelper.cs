@@ -17,10 +17,36 @@ public static class ControllerHelper
         {
             return new(new HelpController(argumentMap));
         }
+        else if (argumentMap.TryGetValue(ArgumentTypeEnum.Version, out _))
+        {
+            return new(new VersionController(argumentMap));
+        }
+        else if (argumentMap.TryGetValue(Dictionary, out _))
+        {
+            return new(new DictionaryController(argumentMap));
+        }
+        else if (argumentMap.TryGetValue(Anagrams, out _))
+        {
+            return new(new AnagramsController(argumentMap));
+        }
+        else if (argumentMap.TryGetValue(Pattern, out _))
+        {
+            return new(new PatternController(argumentMap));
+        }
+        else if (argumentMap.TryGetValue(InputPath, out _))
+        {
+            return new(new QueryController(argumentMap));
+        }
+        else if (Console.IsInputRedirected)
+        {
+            return new (new RedirectionController(argumentMap));
+        }
 
-        return new(new SuggestionController(argumentMap));
+        return new(null, "error. invalid argument combination");
     }
 
     public static Result<string> SetController(Controller controller)
-    => controller.Execute();
+    {
+        return controller.Execute();
+    }
 }

@@ -9,4 +9,7 @@ public static partial class Regexes
 
     [GeneratedRegex(@"^-(\w){1,}$")]
     public static partial Regex PrefixedArgumentRegex();
+
+    [GeneratedRegex(@"[\n\t\s]{1,}")]
+    public static partial Regex EscapeWhitespaceRegex();
 }

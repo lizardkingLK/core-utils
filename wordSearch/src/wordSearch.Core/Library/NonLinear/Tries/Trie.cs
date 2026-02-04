@@ -1,4 +1,7 @@
 using wordSearch.Core.Library.Linear.Arrays;
+using wordSearch.Core.Library.NonLinear.HashMaps;
+using static wordSearch.Core.Shared.Constants;
+using static wordSearch.Core.Shared.Regexes;
 
 namespace wordSearch.Core.Library.NonLinear.Tries;
 
@@ -6,7 +9,7 @@ public class Trie
 {
     private record TrieNode
     {
-        public Dictionary<char, TrieNode> CharMap { get; } = [];
+        public HashMap<char, TrieNode> CharMap { get; } = [];
         public bool IsEndOfWord { get; set; }
         public int OriginalIndex { get; set; }
     }
@@ -30,18 +33,18 @@ public class Trie
 
         _lines.Add(word);
 
-        word = word.Trim().ToLowerInvariant();
+        word = Normalize(word);
 
-        TrieNode? current = _root;
+        TrieNode current = _root;
         foreach (char letter in word)
         {
-            if (!current.CharMap.TryGetValue(letter, out TrieNode? child))
+            if (!current!.CharMap.TryGetValue(letter, out TrieNode? child))
             {
                 child = new();
                 current.CharMap[letter] = child;
             }
 
-            current = child;
+            current = child!;
         }
 
         current.IsEndOfWord = true;
@@ -55,17 +58,17 @@ public class Trie
             throw new ArgumentNullException(nameof(word));
         }
 
-        word = word.Trim().ToLowerInvariant();
+        word = Normalize(word);
 
-        TrieNode? current = _root;
+        TrieNode current = _root;
         foreach (char letter in word)
         {
-            if (!current.CharMap.TryGetValue(letter, out TrieNode? child))
+            if (!current!.CharMap.TryGetValue(letter, out TrieNode? child))
             {
                 return false;
             }
 
-            current = child;
+            current = child!;
         }
 
         return current.IsEndOfWord;
@@ -78,17 +81,17 @@ public class Trie
             throw new ArgumentNullException(nameof(prefix));
         }
 
-        prefix = prefix.Trim().ToLowerInvariant();
+        prefix = Normalize(prefix);
 
-        TrieNode? current = _root;
+        TrieNode current = _root;
         foreach (char letter in prefix)
         {
-            if (!current.CharMap.TryGetValue(letter, out TrieNode? child))
+            if (!current!.CharMap.TryGetValue(letter, out TrieNode? child))
             {
                 return false;
             }
 
-            current = child;
+            current = child!;
         }
 
         return true;
@@ -101,7 +104,7 @@ public class Trie
             throw new ArgumentNullException(nameof(word));
         }
 
-        word = word.Trim().ToLowerInvariant();
+        word = Normalize(word);
 
         _ = Delete(word, _root, 0);
     }
@@ -120,12 +123,12 @@ public class Trie
             return current.CharMap.Count == 0;
         }
 
-        if (!current.CharMap.TryGetValue(word[index], out TrieNode? childNode))
+        if (!current.CharMap.TryGetValue(word[index], out TrieNode? child))
         {
             return false;
         }
 
-        bool canDeleteChild = Delete(word, childNode, index + 1);
+        bool canDeleteChild = Delete(word, child!, index + 1);
         if (canDeleteChild)
         {
             current.CharMap.Remove(word[index]);
@@ -136,11 +139,32 @@ public class Trie
 
     public IEnumerable<string> Autocomplete(string prefix)
     {
-        prefix = prefix.Trim().ToLowerInvariant();
+        prefix = Normalize(prefix);
 
         if (!IsValidPrefix(prefix, out TrieNode? current))
         {
             yield break;
+        }
+
+        static IEnumerable<int> FindMatches(TrieNode current)
+        {
+            if (current.IsEndOfWord)
+            {
+                yield return current.OriginalIndex;
+            }
+
+            foreach ((char letter, TrieNode? child) in current.CharMap)
+            {
+                if (child == null)
+                {
+                    continue;
+                }
+
+                foreach (int index in FindMatches(child))
+                {
+                    yield return index;
+                }
+            }
         }
 
         foreach (int match in FindMatches(current!))
@@ -149,28 +173,112 @@ public class Trie
         }
     }
 
-    private static IEnumerable<int> FindMatches(TrieNode current)
+    public IEnumerable<string> Patterns(string pattern)
     {
-        if (current.IsEndOfWord)
+        pattern = Normalize(pattern);
+
+        int length = pattern.Length;
+        IEnumerable<int> FindPatterns(int index, TrieNode current)
         {
-            yield return current.OriginalIndex;
+            if (index >= length)
+            {
+                if (current.IsEndOfWord)
+                {
+                    yield return current.OriginalIndex;
+                }
+
+                yield break;
+            }
+
+            if (pattern[index] != SymbolPlace)
+            {
+                if (!current.CharMap.TryGetValue(
+                    pattern[index],
+                    out TrieNode? child))
+                {
+                    yield break;
+                }
+
+                foreach (int match in FindPatterns(index + 1, child!))
+                {
+                    yield return match;
+                }
+
+                yield break;
+            }
+
+            foreach ((char letter, TrieNode? child) in current.CharMap)
+            {
+                if (child == null)
+                {
+                    continue;
+                }
+
+                foreach (int match in FindPatterns(index + 1, child))
+                {
+                    yield return match;
+                }
+            }
         }
 
-        foreach ((char letter, TrieNode? child) in current.CharMap)
+        foreach (int match in FindPatterns(0, _root))
         {
-            foreach (int index in FindMatches(child))
+            yield return _lines[match]!;
+        }
+    }
+
+    public IEnumerable<string> Anagrams(string letters)
+    {
+        letters = Normalize(letters);
+
+        int length = letters.Length;
+        HashMap<char, int> counts = [];
+        foreach (char input in letters)
+        {
+            if (!counts.TryAdd(input, 1))
             {
-                yield return index;
+                counts[input]++;
             }
+        }
+
+        IEnumerable<int> FindAnagrams(int wordIndex, TrieNode current)
+        {
+            if (wordIndex >= length && current.IsEndOfWord)
+            {
+                yield return current.OriginalIndex;
+            }
+
+            foreach ((char letter, int count) in counts.OrderBy(kv => kv.Key))
+            {
+                if (counts[letter] == 0
+                || !current!.CharMap.TryGetValue(letter, out TrieNode? child))
+                {
+                    continue;
+                }
+
+                counts[letter]--;
+                foreach (int index in FindAnagrams(wordIndex + 1, child!))
+                {
+                    yield return index;
+                }
+
+                counts[letter]++;
+            }
+        }
+
+        foreach (int match in FindAnagrams(0, _root))
+        {
+            yield return _lines[match]!;
         }
     }
 
     private bool IsValidPrefix(string prefix, out TrieNode? current)
     {
         current = _root;
+        
         foreach (char letter in prefix)
         {
-            if (!current.CharMap.TryGetValue(letter, out TrieNode? child))
+            if (!current!.CharMap.TryGetValue(letter, out TrieNode? child))
             {
                 return false;
             }
@@ -184,4 +292,9 @@ public class Trie
     public IEnumerable<string> Output() => Autocomplete(string.Empty);
 
     public int Count(string word) => Autocomplete(word).Count();
+
+    private static string Normalize(string input)
+    => EscapeWhitespaceRegex()
+    .Replace(input, string.Empty)
+    .ToLowerInvariant();
 }

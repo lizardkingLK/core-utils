@@ -1,3 +1,6 @@
+
+using System.Reflection;
+
 namespace wordSearch.Core.Helpers;
 
 public static class PathHelper
@@ -50,5 +53,14 @@ public static class PathHelper
         validated = path;
 
         return true;
+    }
+
+    internal static string GetAssetPath(string assetPath)
+    {
+        return Path.GetFullPath(
+            Path.Combine(
+                Directory.GetParent(
+                    Assembly.GetExecutingAssembly().Location)!.FullName,
+                    assetPath));
     }
 }

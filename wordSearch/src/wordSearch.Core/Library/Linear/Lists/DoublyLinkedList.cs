@@ -157,6 +157,80 @@ public class DoublyLinkedList<T> : IEnumerable<T>
         return true;
     }
 
+    public void Remove(T value)
+    {
+        LinkNode? current = _head;
+        LinkNode? previous = current;
+        while (current != null)
+        {
+            if (!current.Value!.Equals(value))
+            {
+                previous = current;
+                current = current.Next;
+                continue;
+            }
+
+            if (current == _head)
+            {
+                _ = TryRemoveFromFront(out _);
+            }
+            else if (current == _tail)
+            {
+                _ = TryRemoveFromRear(out _);
+            }
+
+            if (current.Next == null)
+            {
+                previous!.Next = null;
+            }
+            else
+            {
+                current.Next.Previous = previous;
+                previous!.Next = current.Next.Next;
+            }
+
+            break;
+        }
+    }
+
+    public bool TryRemove(T value)
+    {
+        LinkNode? current = _head;
+        LinkNode? previous = current;
+        while (current != null)
+        {
+            if (!current.Value!.Equals(value))
+            {
+                previous = current;
+                current = current.Next;
+                continue;
+            }
+
+            if (current == _head)
+            {
+                return TryRemoveFromFront(out _);
+            }
+            else if (current == _tail)
+            {
+                return TryRemoveFromRear(out _);
+            }
+
+            if (current.Next == null)
+            {
+                previous!.Next = null;
+            }
+            else
+            {
+                current.Next.Previous = previous;
+                previous!.Next = current.Next.Next;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     public bool TryGetValue(
         Predicate<T> filterFunction,
         out T? returned)

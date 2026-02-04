@@ -13,8 +13,20 @@ public static class Values
         new("h", (Help, true, false)),
         new("help", (Help, true, false)),
 
+        new("v", (ArgumentTypeEnum.Version, true, false)),
+        new("version", (ArgumentTypeEnum.Version, true, false)),
+
         new("q", (Query, string.Empty, true)),
         new("query", (Query, string.Empty, true)),
+
+        new("d", (Dictionary, string.Empty, true)),
+        new("dictionary", (Dictionary, string.Empty, true)),
+
+        new("a", (Anagrams, string.Empty, true)),
+        new("anagrams", (Anagrams, string.Empty, true)),
+
+        new("p", (Pattern, string.Empty, true)),
+        new("pattern", (Pattern, string.Empty, true)),
 
         new("c", (Count, 1000, true)),
         new("cout", (Count, 1000, true)),
@@ -62,5 +74,10 @@ public static class Values
         Content = "info. only 1000 suggestions were written. use --output flag to get all items",
         ForegroundColor = ConsoleColor.DarkYellow,
         Y = Console.WindowHeight - 2,
+    };
+
+    public static readonly Message replUnavailableMessage = new()
+    {
+        Content = "error. repl mode not available with current request",
     };
 }

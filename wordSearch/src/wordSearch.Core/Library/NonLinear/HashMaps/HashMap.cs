@@ -124,6 +124,33 @@ public class HashMap<K, V> : IEnumerable<KeyValuePair<K, V?>> where K : notnull
         return true;
     }
 
+    public void Remove(K key)
+    {
+        if (!ContainsKey(
+            key,
+            out DoublyLinkedList<HashNode>? bucket,
+            out HashNode? hashNode))
+        {
+            throw new ApplicationException(
+                "error. cannot remove. key does not exist");
+        }
+
+        bucket!.Remove(hashNode!);
+    }
+
+    public bool TryRemove(K key)
+    {
+        if (!ContainsKey(
+            key,
+            out DoublyLinkedList<HashNode>? bucket,
+            out HashNode? hashNode))
+        {
+            return false;
+        }
+
+        return bucket!.TryRemove(hashNode!);
+    }
+
     private void Set(K key, V? value)
     {
         if (ContainsKey(key, out DoublyLinkedList<HashNode>? bucket, out HashNode? hashNode))
@@ -161,6 +188,8 @@ public class HashMap<K, V> : IEnumerable<KeyValuePair<K, V?>> where K : notnull
 
         _buckets = newBuckets;
     }
+
+    public bool ContainsKey(K key) => ContainsKey(key, out _, out _);
 
     private bool ContainsKey(
         K key,
