@@ -37,4 +37,20 @@ public static class TrieHelper
 
         return trie;
     }
+
+    public static Trie CreateTrieFromEmbeddedAsset(string resource)
+    {
+        Trie trie = new();
+
+        int count = 0;
+        foreach (string line in FileHelper.ReadAllAssetLines(resource))
+        {
+            if (!string.IsNullOrEmpty(line))
+            {
+                trie.Insert(line, count++);
+            }
+        }
+
+        return trie;
+    }
 }

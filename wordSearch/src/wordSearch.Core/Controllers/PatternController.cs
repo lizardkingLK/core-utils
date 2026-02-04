@@ -24,7 +24,7 @@ public record PatternController(
         }
         else
         {
-            SearchPatternsFromPath(DictionaryPath);
+            SearchPatternsFromResource(DictionaryResource);
         }
 
         return new(string.Empty);
@@ -53,11 +53,9 @@ public record PatternController(
         return new(string.Empty);
     }
 
-    private Result<string> SearchPatternsFromPath(string path)
+    private Result<string> SearchPatternsFromResource(string resource)
     {
-        string filePath = GetAssetPath(path);
-
-        Trie trie = CreateTrieFromInputPath(filePath);
+        Trie trie = CreateTrieFromEmbeddedAsset(resource);
         if (IsValidQuery(Arguments[ArgumentTypeEnum.Pattern], out string? pattern))
         {
             OutputSuggestions(Arguments, QueryPatternSuggestions(trie, pattern));
