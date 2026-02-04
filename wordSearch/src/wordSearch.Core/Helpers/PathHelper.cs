@@ -1,6 +1,3 @@
-
-using System.Reflection;
-
 namespace wordSearch.Core.Helpers;
 
 public static class PathHelper
@@ -60,7 +57,7 @@ public static class PathHelper
         return Path.GetFullPath(
             Path.Combine(
                 Directory.GetParent(
-                    Assembly.GetExecutingAssembly().Location)!.FullName,
+                    AppContext.BaseDirectory)!.FullName,
                     assetPath));
     }
 }
