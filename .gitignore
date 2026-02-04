@@ -5,6 +5,7 @@
 
 # tested text files
 *.txt
+!wordSearch/src/wordSearch.Core/Assets/Dictionary/index.txt
 
 # .vscode
 .vscode
