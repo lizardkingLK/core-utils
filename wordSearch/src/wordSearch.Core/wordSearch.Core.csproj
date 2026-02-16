@@ -10,10 +10,4 @@
     <EmbeddedResource Include="Assets/Dictionary/index.txt" />
   </ItemGroup>
 
-  <!-- <ItemGroup>
-    <None Update="./Assets/Dictionary/index.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup> -->
-
 </Project>
