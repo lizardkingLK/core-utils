@@ -1,7 +1,7 @@
 using passwordGenerator.Core.Abstractions;
 using passwordGenerator.Core.Builder;
 using passwordGenerator.Core.Interactions;
-using passwordGenerator.Core.Library.DataStructures.Linear.Array;
+using passwordGenerator.Core.Library.DataStructures.Linear.Arrays.DynamicallyAllocatedArray;
 
 namespace passwordGenerator.Core.Helpers;
 
@@ -11,7 +11,7 @@ public static class InteractionHelper
     {
         passwordBuilder = new();
 
-        DynamicArray<Interaction> interactions = new(
+        DynamicallyAllocatedArray<Interaction> interactions = new(
             new NumericInteraction(passwordBuilder),
             new LowerCaseInteraction(passwordBuilder),
             new UpperCaseInteraction(passwordBuilder),
