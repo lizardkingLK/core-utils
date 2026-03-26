@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text;
 using passwordGenerator.Core.Shared;
 using static passwordGenerator.Core.Shared.Constants;
@@ -58,7 +59,7 @@ public class PasswordBuilder
         IEnumerable<char> passwordAsArray = Enumerable
         .Range(0, _count)
         .Select(_ =>
-        _sourceBuilder[Random.Shared.Next(_sourceBuilder.Length)]);
+        _sourceBuilder[RandomNumberGenerator.GetInt32(_sourceBuilder.Length)]);
 
         return new(string.Join(null, passwordAsArray), null, null);
     }
