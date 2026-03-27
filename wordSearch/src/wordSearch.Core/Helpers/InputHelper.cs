@@ -59,7 +59,7 @@ public static class InputHelper
 
         if (countObject is string countString
         && int.TryParse(countString, out count)
-        && count > 0 && count < 1000)
+        && count > 0 && count <= 1000)
         {
             return true;
         }
