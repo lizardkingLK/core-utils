@@ -141,7 +141,24 @@ public class Trie
     {
         prefix = Normalize(prefix);
 
-        if (!IsValidPrefix(prefix, out TrieNode? current))
+        bool IsValidPrefix(out TrieNode? current)
+        {
+            current = _root;
+
+            foreach (char letter in prefix)
+            {
+                if (!current!.CharMap.TryGetValue(letter, out TrieNode? child))
+                {
+                    return false;
+                }
+
+                current = child;
+            }
+
+            return true;
+        }
+
+        if (!IsValidPrefix(out TrieNode? current))
         {
             yield break;
         }
@@ -272,21 +289,9 @@ public class Trie
         }
     }
 
-    private bool IsValidPrefix(string prefix, out TrieNode? current)
+    public IEnumerable<string> Random()
     {
-        current = _root;
-        
-        foreach (char letter in prefix)
-        {
-            if (!current!.CharMap.TryGetValue(letter, out TrieNode? child))
-            {
-                return false;
-            }
-
-            current = child;
-        }
-
-        return true;
+        yield return _lines[System.Random.Shared.Next(_lines.Count)]!;
     }
 
     public IEnumerable<string> Output() => Autocomplete(string.Empty);

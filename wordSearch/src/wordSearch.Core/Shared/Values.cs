@@ -16,6 +16,9 @@ public static class Values
         new("v", (ArgumentTypeEnum.Version, true, false)),
         new("version", (ArgumentTypeEnum.Version, true, false)),
 
+        new("r", (ArgumentTypeEnum.Random, true, false)),
+        new("random", (ArgumentTypeEnum.Random, true, false)),
+
         new("q", (Query, string.Empty, true)),
         new("query", (Query, string.Empty, true)),
 

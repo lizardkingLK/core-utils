@@ -70,4 +70,9 @@ public static class QueryHelper
     {
         return trie.Autocomplete(query);
     }
+
+    public static IEnumerable<string> QueryRandomized(Trie trie)
+    {
+        return trie.Random();
+    }
 }

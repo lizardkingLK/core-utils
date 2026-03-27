@@ -4,6 +4,7 @@ public enum ArgumentTypeEnum : byte
 {
     Help,
     Version,
+    Random,
     Anagrams,
     Dictionary,
     Query,  

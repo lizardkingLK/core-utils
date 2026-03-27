@@ -21,6 +21,10 @@ public static class ControllerHelper
         {
             return new(new VersionController(argumentMap));
         }
+        else if (argumentMap.TryGetValue(ArgumentTypeEnum.Random, out _))
+        {
+            return new(new RandomController(argumentMap));
+        }
         else if (argumentMap.TryGetValue(Dictionary, out _))
         {
             return new(new DictionaryController(argumentMap));
@@ -39,7 +43,7 @@ public static class ControllerHelper
         }
         else if (Console.IsInputRedirected)
         {
-            return new (new RedirectionController(argumentMap));
+            return new(new RedirectionController(argumentMap));
         }
 
         return new(null, "error. invalid argument combination");
