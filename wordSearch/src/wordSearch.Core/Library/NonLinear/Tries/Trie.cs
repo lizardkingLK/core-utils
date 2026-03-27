@@ -289,9 +289,12 @@ public class Trie
         }
     }
 
-    public IEnumerable<string> Random()
+    public IEnumerable<string> Random(int count = 1)
     {
-        yield return _lines[System.Random.Shared.Next(_lines.Count)]!;
+        for (int i = 0; i < count; i++)
+        {
+            yield return _lines[System.Random.Shared.Next(_lines.Count)]!;
+        }
     }
 
     public IEnumerable<string> Output() => Autocomplete(string.Empty);

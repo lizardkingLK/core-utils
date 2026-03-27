@@ -53,6 +53,20 @@ public static class InputHelper
         return false;
     }
 
+    public static bool IsValidCount(object? countObject, out int count)
+    {
+        count = 0;
+
+        if (countObject is string countString
+        && int.TryParse(countString, out count)
+        && count > 0 && count < 1000)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static bool IsValidQuery(
         HashMap<ArgumentTypeEnum, object> arguments,
         out string query)

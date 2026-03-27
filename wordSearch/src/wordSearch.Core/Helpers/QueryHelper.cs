@@ -71,8 +71,8 @@ public static class QueryHelper
         return trie.Autocomplete(query);
     }
 
-    public static IEnumerable<string> QueryRandomized(Trie trie)
+    public static IEnumerable<string> QueryRandomized(Trie trie, int count)
     {
-        return trie.Random();
+        return trie.Random(count);
     }
 }

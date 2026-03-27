@@ -16,9 +16,6 @@ public static class Values
         new("v", (ArgumentTypeEnum.Version, true, false)),
         new("version", (ArgumentTypeEnum.Version, true, false)),
 
-        new("r", (ArgumentTypeEnum.Random, true, false)),
-        new("random", (ArgumentTypeEnum.Random, true, false)),
-
         new("q", (Query, string.Empty, true)),
         new("query", (Query, string.Empty, true)),
 
@@ -33,6 +30,9 @@ public static class Values
 
         new("c", (Count, 1000, true)),
         new("cout", (Count, 1000, true)),
+
+        new("r", (ArgumentTypeEnum.Random, 1000, true)),
+        new("random", (ArgumentTypeEnum.Random, 1000, true)),
 
         new("i", (InputPath, string.Empty, true)),
         new("input", (InputPath, string.Empty, true)),
